@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TeleShort - Mini App</title>
+    <title>BDTxLink - Mini App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -35,7 +35,7 @@
     <!-- LOADING SCREEN -->
     <div id="ui-loading" class="fixed inset-0 flex flex-col items-center justify-center bg-[#0f172a] z-50">
         <i class="fa-solid fa-bolt text-5xl text-indigo-500 mb-4 animate-pulse"></i>
-        <h2 class="text-2xl font-bold text-white mb-2" id="loading-title">TeleShort</h2>
+        <h2 class="text-2xl font-bold text-white mb-2" id="loading-title">BDTxLink</h2>
         <p class="text-slate-400 text-sm" id="loading-text">Connecting to servers...</p>
     </div>
 
@@ -65,7 +65,7 @@
         <header class="flex items-center justify-between p-4 glass-panel m-4 sticky top-4 z-30">
             <div class="flex items-center space-x-3">
                 <div class="w-11 h-11 rounded-full primary-gradient flex items-center justify-center shadow-lg"><i class="fa-solid fa-bolt text-white text-lg"></i></div>
-                <div><h1 class="font-bold text-lg text-white leading-tight">TeleShort</h1><p class="text-[11px] text-indigo-300" id="user-greeting">Loading...</p></div>
+                <div><h1 class="font-bold text-lg text-white leading-tight">BDTxLink</h1><p class="text-[11px] text-indigo-300" id="user-greeting">Loading...</p></div>
             </div>
             <div class="flex items-center space-x-2 bg-slate-800/80 py-2 px-4 rounded-full border border-slate-700 shadow-inner">
                 <i class="fa-solid fa-wallet text-emerald-400"></i><span class="font-bold text-sm text-emerald-400" id="header-balance">$0.00</span>
@@ -278,7 +278,7 @@
         const VERCEL_API_URL = 'https://bd-tx-earning.vercel.app/api'; 
         
         const BOT_USERNAME = 'BDTxEarningbot'; 
-        const APP_SHORT_NAME = 'TeleShortLink'; 
+        const APP_SHORT_NAME = 'BDTxLink'; // <-- এখানেও নাম আপডেট করা হয়েছে
 
         let dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let currentUserData = null;
