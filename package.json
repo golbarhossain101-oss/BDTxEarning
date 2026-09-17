@@ -1,1 +1,28 @@
 
+{
+  "name": "teleshort-earning-system",
+  "version": "1.0.0",
+  "description": "Backend API & Vercel Serverless Functions for TeleShort Telegram Mini App",
+  "main": "api/index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "keywords": [
+    "telegram",
+    "mini-app",
+    "earning",
+    "bot",
+    "vercel",
+    "supabase",
+    "serverless"
+  ],
+  "author": "BDTxEarning",
+  "license": "MIT"
+}
