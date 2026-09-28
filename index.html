@@ -12,7 +12,7 @@
     <!-- Monetag -->
     <script src='//libtl.com/sdk.js' data-zone='11825523' data-sdk='show_11825523'></script>
 
-    <!-- AdsGram -->
+    <!-- AdsGram Interstitial -->
     <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
     <!-- Supabase -->
@@ -120,6 +120,7 @@
     <!-- MAINTENANCE SCREEN -->
     <div id="ui-maintenance" class="fixed inset-0 flex flex-col items-center justify-center bg-[#0f172a] z-50 hidden fade-in">
         <div class="glass-panel p-8 max-w-sm text-center border border-amber-500/30">
+
             <div class="w-20 h-20 bg-amber-500/20 rounded-full mx-auto flex items-center justify-center mb-6">
                 <i class="fa-solid fa-person-digging text-4xl text-amber-500"></i>
             </div>
@@ -138,6 +139,7 @@
 
     <!-- WARNING POPUP -->
     <div id="warning-popup" class="fixed inset-0 z-[60] bg-[#0f172a]/90 backdrop-blur-sm flex items-center justify-center hidden fade-in">
+
         <div class="glass-panel p-6 m-4 max-w-sm text-center border border-red-500/50 shadow-2xl shadow-red-500/20">
 
             <div class="w-16 h-16 bg-red-500/20 rounded-full mx-auto flex items-center justify-center mb-4">
@@ -154,8 +156,10 @@
                 without payout.
             </p>
 
-            <button onclick="document.getElementById('warning-popup').classList.add('hidden')"
-                class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl transition-all">
+            <button
+                onclick="document.getElementById('warning-popup').classList.add('hidden')"
+                class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-xl transition-all"
+            >
                 I Agree
             </button>
         </div>
@@ -187,6 +191,7 @@
 
             <div class="flex items-center space-x-2 bg-slate-800/80 py-2 px-4 rounded-full border border-slate-700 shadow-inner">
                 <i class="fa-solid fa-wallet text-emerald-400"></i>
+
                 <span class="font-bold text-sm text-emerald-400" id="header-balance">
                     $0.00
                 </span>
@@ -221,11 +226,17 @@
                         <span>Shorten & Earn</span>
                     </button>
 
-                    <div id="shorten-result" class="hidden mt-5 p-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 rounded-xl">
+                    <div
+                        id="shorten-result"
+                        class="hidden mt-5 p-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 rounded-xl"
+                    >
 
                         <div class="flex justify-between items-center bg-slate-900 rounded-lg p-3">
 
-                            <span id="short-link-display" class="text-sm font-mono text-emerald-400 truncate w-[80%]"></span>
+                            <span
+                                id="short-link-display"
+                                class="text-sm font-mono text-emerald-400 truncate w-[80%]"
+                            ></span>
 
                             <button
                                 id="btn-copy-link"
@@ -361,7 +372,10 @@
 
                     <p class="text-sm text-slate-300 mb-6">
                         Earn a lifetime
-                        <span class="text-emerald-400 font-bold bg-emerald-500/10 px-2 rounded" id="refer-commission">
+                        <span
+                            class="text-emerald-400 font-bold bg-emerald-500/10 px-2 rounded"
+                            id="refer-commission"
+                        >
                             10%
                         </span>
                         commission from your friends' earnings!
@@ -576,14 +590,19 @@
                         target="_blank"
                         class="hidden items-center justify-between p-4 hover:bg-slate-800/50 rounded-xl transition"
                     >
+
                         <div class="flex items-center">
+
                             <i class="fa-brands fa-telegram w-8 text-blue-400 text-2xl text-center"></i>
+
                             <span class="font-medium text-sm text-slate-200 ml-2">
                                 Official Channel
                             </span>
+
                         </div>
 
                         <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500"></i>
+
                     </a>
 
                     <div id="div-line-yt" class="hidden h-px bg-slate-700/50 mx-4"></div>
@@ -594,14 +613,19 @@
                         target="_blank"
                         class="hidden items-center justify-between p-4 hover:bg-slate-800/50 rounded-xl transition"
                     >
+
                         <div class="flex items-center">
+
                             <i class="fa-brands fa-youtube w-8 text-red-500 text-2xl text-center"></i>
+
                             <span class="font-medium text-sm text-slate-200 ml-2">
                                 YouTube Channel
                             </span>
+
                         </div>
 
                         <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-500"></i>
+
                     </a>
 
                 </div>
@@ -618,14 +642,19 @@
                         target="_blank"
                         class="hidden items-center justify-between p-4 hover:bg-slate-800/50 rounded-xl transition"
                     >
+
                         <div class="flex items-center">
+
                             <i class="fa-solid fa-shield-halved w-8 text-slate-400 text-lg text-center"></i>
+
                             <span class="text-sm text-slate-300 ml-2">
                                 Privacy Policy
                             </span>
+
                         </div>
 
                         <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+
                     </a>
 
                     <a
@@ -634,14 +663,19 @@
                         target="_blank"
                         class="hidden items-center justify-between p-4 hover:bg-slate-800/50 rounded-xl transition border-t border-slate-700/50"
                     >
+
                         <div class="flex items-center">
+
                             <i class="fa-solid fa-file-contract w-8 text-slate-400 text-lg text-center"></i>
+
                             <span class="text-sm text-slate-300 ml-2">
                                 Terms of Service
                             </span>
+
                         </div>
 
                         <i class="fa-solid fa-chevron-right text-xs text-slate-600"></i>
+
                     </a>
 
                 </div>
@@ -669,7 +703,10 @@
                     <div class="nav-icon w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-1">
                         <i class="fa-solid fa-house"></i>
                     </div>
-                    <span class="text-[10px] font-medium tracking-wide">Home</span>
+
+                    <span class="text-[10px] font-medium tracking-wide">
+                        Home
+                    </span>
                 </button>
 
                 <button
@@ -679,7 +716,10 @@
                     <div class="nav-icon w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-1">
                         <i class="fa-solid fa-link"></i>
                     </div>
-                    <span class="text-[10px] font-medium tracking-wide">Links</span>
+
+                    <span class="text-[10px] font-medium tracking-wide">
+                        Links
+                    </span>
                 </button>
 
                 <button
@@ -689,7 +729,10 @@
                     <div class="nav-icon w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-1">
                         <i class="fa-solid fa-users"></i>
                     </div>
-                    <span class="text-[10px] font-medium tracking-wide">Refer</span>
+
+                    <span class="text-[10px] font-medium tracking-wide">
+                        Refer
+                    </span>
                 </button>
 
                 <button
@@ -699,17 +742,23 @@
                     <div class="nav-icon w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-1">
                         <i class="fa-solid fa-wallet"></i>
                     </div>
-                    <span class="text-[10px] font-medium tracking-wide">Wallet</span>
+
+                    <span class="text-[10px] font-medium tracking-wide">
+                        Wallet
+                    </span>
                 </button>
 
                 <button
                     class="nav-btn nav-item flex flex-col items-center w-1/5"
                     data-target="page-profile"
                 >
-                    <div class="nav-icon w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-1">
+                    <div class="nav-icon nav-icon w-10 h-10 rounded-xl flex items-center justify-center text-lg mb-1">
                         <i class="fa-solid fa-user"></i>
                     </div>
-                    <span class="text-[10px] font-medium tracking-wide">Profile</span>
+
+                    <span class="text-[10px] font-medium tracking-wide">
+                        Profile
+                    </span>
                 </button>
 
             </div>
@@ -730,15 +779,17 @@
                 id="ad-blocker-warning"
                 class="hidden bg-red-900/50 border border-red-500 rounded-lg p-4 mb-4"
             >
+
                 <i class="fa-solid fa-ban text-3xl text-red-500 mb-2"></i>
 
                 <h3 class="text-red-400 font-bold text-sm mb-1">
-                    Ad Blocker Detected!
+                    Ad Unavailable!
                 </h3>
 
                 <p class="text-xs text-white">
-                    Disable Ad Blocker to unlock.
+                    Please disable your ad blocker or try again later.
                 </p>
+
             </div>
 
             <div
@@ -774,6 +825,13 @@
                 Please Wait...
             </h2>
 
+            <p
+                id="ad-provider-status"
+                class="text-xs text-slate-500 mb-4"
+            >
+                Preparing advertisement...
+            </p>
+
             <button
                 id="btn-watch-ad"
                 disabled
@@ -801,7 +859,8 @@
         // API CONFIGURATION
         // ==========================================
 
-        const SUPABASE_URL = 'https://sqxkeughgjmsewbhelaj.supabase.co';
+        const SUPABASE_URL =
+            'https://sqxkeughgjmsewbhelaj.supabase.co';
 
         const SUPABASE_ANON_KEY =
             'sb_publishable_5bG4S7fpmB622ihDHmJIFw_QZr3YIqP';
@@ -846,6 +905,7 @@
             window.Telegram.WebApp;
 
         tg.expand();
+
         tg.setHeaderColor('#0f172a');
 
 
@@ -931,36 +991,53 @@
                 if (!AdsGramController) {
 
                     console.log(
-                        'AdsGram unavailable. Continuing with Monetag.'
+                        'AdsGram unavailable. Continuing.'
                     );
 
                     resolve(false);
+
                     return;
                 }
 
                 try {
 
-                    AdsGramController
-                        .show()
+                    const result =
+                        AdsGramController.show();
 
-                        .then(() => {
+                    if (
+                        result &&
+                        typeof result.then === 'function'
+                    ) {
 
-                            console.log(
-                                'AdsGram interstitial completed.'
-                            );
+                        result
+                            .then(() => {
 
-                            resolve(true);
-                        })
+                                console.log(
+                                    'AdsGram interstitial finished.'
+                                );
 
-                        .catch((error) => {
+                                resolve(true);
 
-                            console.log(
-                                'AdsGram interstitial skipped/failed:',
-                                error
-                            );
+                            })
+                            .catch((error) => {
 
-                            resolve(false);
-                        });
+                                console.log(
+                                    'AdsGram interstitial skipped/failed:',
+                                    error
+                                );
+
+                                resolve(false);
+
+                            });
+
+                    } else {
+
+                        console.log(
+                            'AdsGram show returned no Promise.'
+                        );
+
+                        resolve(false);
+                    }
 
                 } catch (error) {
 
@@ -983,9 +1060,13 @@
         function safeAlert(msg) {
 
             try {
+
                 tg.showAlert(msg);
+
             } catch (e) {
+
                 alert(msg);
+
             }
         }
 
@@ -995,7 +1076,8 @@
             const el =
                 document.createElement('textarea');
 
-            el.value = text;
+            el.value =
+                text;
 
             document.body.appendChild(el);
 
@@ -1043,23 +1125,33 @@
                 );
 
             if (navButton) {
+
                 navButton.classList.add('active');
+
             }
 
             if (pageId === 'page-links') {
+
                 loadLinks();
+
             }
 
             if (pageId === 'page-home') {
+
                 generateDateReport();
+
             }
 
             if (pageId === 'page-refer') {
+
                 fetchReferralDetails();
+
             }
 
             if (pageId === 'page-wallet') {
+
                 loadWithdrawalHistory();
+
             }
         }
 
@@ -1072,24 +1164,28 @@
 
             try {
 
-                // AdsGram initialize
+                // Initialize AdsGram
                 initializeAdsGram();
 
 
-                // Supabase settings
+                // Load admin settings
                 await loadAdminSettings();
 
 
                 // Maintenance
-                if (adminSettings.maintenance_mode) {
+                if (
+                    adminSettings.maintenance_mode
+                ) {
 
                     document
                         .getElementById('ui-loading')
-                        .classList.add('hidden');
+                        .classList
+                        .add('hidden');
 
                     document
                         .getElementById('ui-maintenance')
-                        .classList.remove('hidden');
+                        .classList
+                        .remove('hidden');
 
                     return;
                 }
@@ -1104,7 +1200,9 @@
 
 
                 // Telegram user
-                if (tg.initDataUnsafe?.user) {
+                if (
+                    tg.initDataUnsafe?.user
+                ) {
 
                     const user =
                         tg.initDataUnsafe.user;
@@ -1112,28 +1210,34 @@
 
                     const {
                         data: existUser
-                    } = await dbClient
-                        .from('users')
-                        .select('*')
-                        .eq(
-                            'telegram_id',
-                            user.id
-                        )
-                        .maybeSingle();
+                    } =
+                        await dbClient
+                            .from('users')
+                            .select('*')
+                            .eq(
+                                'telegram_id',
+                                user.id
+                            )
+                            .maybeSingle();
 
 
+                    // Blocked user
                     if (
                         existUser &&
                         existUser.is_blocked
                     ) {
 
                         document
-                            .getElementById('loading-title')
+                            .getElementById(
+                                'loading-title'
+                            )
                             .innerText =
                             "Account Blocked";
 
                         document
-                            .getElementById('loading-text')
+                            .getElementById(
+                                'loading-text'
+                            )
                             .innerText =
                             "Your account has been blocked.";
 
@@ -1141,23 +1245,33 @@
                     }
 
 
+                    // New user
                     if (!existUser) {
 
                         const {
                             data: insertedUser,
                             error: insertUserError
-                        } = await dbClient
-                            .from('users')
-                            .insert([{
-                                telegram_id: user.id,
-                                first_name: user.first_name,
-                                username: user.username
-                            }])
-                            .select()
-                            .single();
+                        } =
+                            await dbClient
+                                .from('users')
+                                .insert([{
+                                    telegram_id:
+                                        user.id,
+
+                                    first_name:
+                                        user.first_name,
+
+                                    username:
+                                        user.username
+                                }])
+                                .select()
+                                .single();
 
 
-                        if (insertUserError) {
+                        if (
+                            insertUserError
+                        ) {
+
                             throw new Error(
                                 insertUserError.message
                             );
@@ -1168,9 +1282,12 @@
                             insertedUser;
 
 
+                        // Referral
                         if (
                             startParam &&
-                            startParam.startsWith('ref_')
+                            startParam.startsWith(
+                                'ref_'
+                            )
                         ) {
 
                             const referrerId =
@@ -1207,7 +1324,8 @@
                                     await fetch(
                                         `${VERCEL_API_URL}/process_referral`,
                                         {
-                                            method: 'POST',
+                                            method:
+                                                'POST',
 
                                             headers: {
                                                 'Content-Type':
@@ -1226,6 +1344,7 @@
                                     );
 
                                 } catch (e) {
+
                                     console.log(
                                         'Referral API error:',
                                         e
@@ -1238,12 +1357,15 @@
 
                         currentUserData =
                             existUser;
+
                     }
 
                 } else if (!startParam) {
 
                     document
-                        .getElementById('loading-text')
+                        .getElementById(
+                            'loading-text'
+                        )
                         .innerText =
                         "Open inside Telegram App.";
 
@@ -1254,7 +1376,9 @@
                 // Link visitor
                 if (
                     startParam &&
-                    startParam.startsWith('link_')
+                    startParam.startsWith(
+                        'link_'
+                    )
                 ) {
 
                     window.currentShortId =
@@ -1272,14 +1396,21 @@
                 } else {
 
                     document
-                        .getElementById('ui-loading')
-                        .classList.add('hidden');
+                        .getElementById(
+                            'ui-loading'
+                        )
+                        .classList
+                        .add('hidden');
 
                     document
-                        .getElementById('ui-main-app')
-                        .classList.remove('hidden');
+                        .getElementById(
+                            'ui-main-app'
+                        )
+                        .classList
+                        .remove('hidden');
 
                     setupDashboard();
+
                 }
 
             } catch (e) {
@@ -1290,14 +1421,19 @@
                 );
 
                 document
-                    .getElementById('loading-title')
+                    .getElementById(
+                        'loading-title'
+                    )
                     .innerText =
                     "Connection Error";
 
                 document
-                    .getElementById('loading-text')
+                    .getElementById(
+                        'loading-text'
+                    )
                     .innerText =
-                    e.message || "Unable to connect to server.";
+                    e.message ||
+                    "Unable to connect to server.";
             }
         }
 
@@ -1311,11 +1447,12 @@
             const {
                 data,
                 error
-            } = await dbClient
-                .from('settings')
-                .select('*')
-                .limit(1)
-                .maybeSingle();
+            } =
+                await dbClient
+                    .from('settings')
+                    .select('*')
+                    .limit(1)
+                    .maybeSingle();
 
 
             if (error) {
@@ -1344,7 +1481,8 @@
                 Math.max(
                     1,
                     parseInt(
-                        adminSettings.ads_per_link || 1,
+                        adminSettings.ads_per_link ||
+                        1,
                         10
                     )
                 );
@@ -1361,16 +1499,17 @@
 
                 const {
                     data: linkData
-                } = await dbClient
-                    .from('links')
-                    .select(
-                        'id, user_id'
-                    )
-                    .eq(
-                        'short_id',
-                        window.currentShortId
-                    )
-                    .single();
+                } =
+                    await dbClient
+                        .from('links')
+                        .select(
+                            'id, user_id'
+                        )
+                        .eq(
+                            'short_id',
+                            window.currentShortId
+                        )
+                        .single();
 
 
                 if (
@@ -1378,9 +1517,14 @@
                     currentUserData
                 ) {
 
+                    // Own link
                     if (
-                        String(linkData.user_id) ===
-                        String(currentUserData.id)
+                        String(
+                            linkData.user_id
+                        ) ===
+                        String(
+                            currentUserData.id
+                        )
                     ) {
 
                         window.invalidClickReason =
@@ -1390,24 +1534,26 @@
                     }
 
 
+                    // Duplicate click
                     if (
                         currentUserData.telegram_id
                     ) {
 
                         const {
                             data: logs
-                        } = await dbClient
-                            .from('click_logs')
-                            .select('id')
-                            .eq(
-                                'link_id',
-                                linkData.id
-                            )
-                            .eq(
-                                'clicker_tg_id',
-                                currentUserData.telegram_id
-                            )
-                            .limit(1);
+                        } =
+                            await dbClient
+                                .from('click_logs')
+                                .select('id')
+                                .eq(
+                                    'link_id',
+                                    linkData.id
+                                )
+                                .eq(
+                                    'clicker_tg_id',
+                                    currentUserData.telegram_id
+                                )
+                                .limit(1);
 
 
                         if (
@@ -1438,8 +1584,11 @@
         function setupDashboard() {
 
             document
-                .getElementById('warning-popup')
-                .classList.remove('hidden');
+                .getElementById(
+                    'warning-popup'
+                )
+                .classList
+                .remove('hidden');
 
 
             const u =
@@ -1449,89 +1598,123 @@
             if (u) {
 
                 document
-                    .getElementById('user-greeting')
+                    .getElementById(
+                        'user-greeting'
+                    )
                     .innerText =
                     `Hello, ${u.first_name}!`;
 
+
                 document
-                    .getElementById('profile-name')
+                    .getElementById(
+                        'profile-name'
+                    )
                     .innerText =
                     u.first_name;
 
+
                 document
-                    .getElementById('profile-avatar')
+                    .getElementById(
+                        'profile-avatar'
+                    )
                     .innerText =
                     u.first_name
                         .charAt(0);
 
+
                 document
-                    .getElementById('profile-id')
+                    .getElementById(
+                        'profile-id'
+                    )
                     .innerText =
                     `ID: ${u.id}`;
 
 
                 document
-                    .getElementById('referral-link-display')
+                    .getElementById(
+                        'referral-link-display'
+                    )
                     .innerText =
                     `https://t.me/${BOT_USERNAME}/${APP_SHORT_NAME}?startapp=ref_${u.id}`;
             }
 
 
             document
-                .getElementById('header-balance')
+                .getElementById(
+                    'header-balance'
+                )
                 .innerText =
                 `$${parseFloat(
-                    currentUserData.balance || 0
+                    currentUserData.balance ||
+                    0
                 ).toFixed(2)}`;
 
 
             document
-                .getElementById('wallet-balance-page')
+                .getElementById(
+                    'wallet-balance-page'
+                )
                 .innerText =
                 `$${parseFloat(
-                    currentUserData.balance || 0
+                    currentUserData.balance ||
+                    0
                 ).toFixed(2)}`;
 
 
             document
-                .getElementById('stat-today-earn')
+                .getElementById(
+                    'stat-today-earn'
+                )
                 .innerText =
                 `$${parseFloat(
-                    currentUserData.today_earnings || 0
+                    currentUserData.today_earnings ||
+                    0
                 ).toFixed(4)}`;
 
 
             document
-                .getElementById('stat-views')
+                .getElementById(
+                    'stat-views'
+                )
                 .innerText =
-                currentUserData.total_clicks || 0;
+                currentUserData.total_clicks ||
+                0;
 
 
             document
-                .getElementById('stat-cpm')
+                .getElementById(
+                    'stat-cpm'
+                )
                 .innerText =
                 `$${parseFloat(
-                    adminSettings.cpm || 0
+                    adminSettings.cpm ||
+                    0
                 ).toFixed(2)}`;
 
 
             document
-                .getElementById('refer-commission')
+                .getElementById(
+                    'refer-commission'
+                )
                 .innerText =
                 `${adminSettings.refer_percent || 10}%`;
 
 
             document
-                .getElementById('min-withdraw-display')
+                .getElementById(
+                    'min-withdraw-display'
+                )
                 .innerText =
                 `$${parseFloat(
-                    adminSettings.min_withdraw || 5
+                    adminSettings.min_withdraw ||
+                    5
                 ).toFixed(2)}`;
 
 
-            // Profile links
-
-            if (adminSettings.tg_channel_url) {
+            // Telegram channel
+            if (
+                adminSettings.tg_channel_url
+            ) {
 
                 const el =
                     document.getElementById(
@@ -1541,12 +1724,20 @@
                 el.href =
                     adminSettings.tg_channel_url;
 
-                el.classList.remove('hidden');
-                el.classList.add('flex');
+                el.classList.remove(
+                    'hidden'
+                );
+
+                el.classList.add(
+                    'flex'
+                );
             }
 
 
-            if (adminSettings.yt_channel_url) {
+            // YouTube
+            if (
+                adminSettings.yt_channel_url
+            ) {
 
                 const el =
                     document.getElementById(
@@ -1556,8 +1747,14 @@
                 el.href =
                     adminSettings.yt_channel_url;
 
-                el.classList.remove('hidden');
-                el.classList.add('flex');
+                el.classList.remove(
+                    'hidden'
+                );
+
+                el.classList.add(
+                    'flex'
+                );
+
 
                 if (
                     adminSettings.tg_channel_url
@@ -1567,14 +1764,18 @@
                         .getElementById(
                             'div-line-yt'
                         )
-                        .classList.remove(
+                        .classList
+                        .remove(
                             'hidden'
                         );
                 }
             }
 
 
-            if (adminSettings.privacy_url) {
+            // Privacy
+            if (
+                adminSettings.privacy_url
+            ) {
 
                 const el =
                     document.getElementById(
@@ -1584,12 +1785,20 @@
                 el.href =
                     adminSettings.privacy_url;
 
-                el.classList.remove('hidden');
-                el.classList.add('flex');
+                el.classList.remove(
+                    'hidden'
+                );
+
+                el.classList.add(
+                    'flex'
+                );
             }
 
 
-            if (adminSettings.terms_url) {
+            // Terms
+            if (
+                adminSettings.terms_url
+            ) {
 
                 const el =
                     document.getElementById(
@@ -1599,13 +1808,17 @@
                 el.href =
                     adminSettings.terms_url;
 
-                el.classList.remove('hidden');
-                el.classList.add('flex');
+                el.classList.remove(
+                    'hidden'
+                );
+
+                el.classList.add(
+                    'flex'
+                );
             }
 
 
             // Payment methods
-
             const methods =
                 (
                     adminSettings.payment_methods ||
@@ -1623,48 +1836,56 @@
                 '<option value="">Choose Method...</option>';
 
 
-            methods.forEach(m => {
+            methods.forEach(
+                m => {
 
-                const opt =
-                    document.createElement(
-                        'option'
+                    const opt =
+                        document.createElement(
+                            'option'
+                        );
+
+                    opt.value =
+                        m.trim();
+
+                    opt.innerText =
+                        m.trim();
+
+                    sel.appendChild(
+                        opt
                     );
-
-                opt.value =
-                    m.trim();
-
-                opt.innerText =
-                    m.trim();
-
-                sel.appendChild(opt);
-            });
+                }
+            );
 
 
             // Navigation
-
             document
-                .querySelectorAll('.nav-btn')
-                .forEach(btn => {
+                .querySelectorAll(
+                    '.nav-btn'
+                )
+                .forEach(
+                    btn => {
 
-                    btn.addEventListener(
-                        'click',
-                        function () {
+                        btn.addEventListener(
+                            'click',
+                            function () {
 
-                            switchPage(
-                                this.getAttribute(
-                                    'data-target'
-                                )
-                            );
-                        }
-                    );
+                                switchPage(
+                                    this.getAttribute(
+                                        'data-target'
+                                    )
+                                );
+                            }
+                        );
 
-                });
+                    }
+                );
 
 
-            // Shorten
-
+            // Shorten link
             document
-                .getElementById('btn-shorten')
+                .getElementById(
+                    'btn-shorten'
+                )
                 .addEventListener(
                     'click',
                     async function () {
@@ -1679,7 +1900,9 @@
 
 
                         if (
-                            !url.startsWith('http')
+                            !url.startsWith(
+                                'http'
+                            )
                         ) {
 
                             return safeAlert(
@@ -1708,22 +1931,25 @@
 
                             const {
                                 error
-                            } = await dbClient
-                                .from('links')
-                                .insert([{
-                                    original_url:
-                                        url,
+                            } =
+                                await dbClient
+                                    .from('links')
+                                    .insert([{
+                                        original_url:
+                                            url,
 
-                                    short_id:
-                                        shortId,
+                                        short_id:
+                                            shortId,
 
-                                    user_id:
-                                        currentUserData.id
-                                }]);
+                                        user_id:
+                                            currentUserData.id
+                                    }]);
 
 
                             if (error) {
+
                                 throw error;
+
                             }
 
 
@@ -1754,9 +1980,7 @@
 
                         } catch (e) {
 
-                            console.error(
-                                e
-                            );
+                            console.error(e);
 
                             safeAlert(
                                 "Error generating link."
@@ -1774,6 +1998,7 @@
                 );
 
 
+            // Copy short link
             document
                 .getElementById(
                     'btn-copy-link'
@@ -1791,6 +2016,7 @@
                 );
 
 
+            // Copy referral
             document
                 .getElementById(
                     'btn-copy-referral'
@@ -1819,7 +2045,10 @@
                 .value =
                 `${now.getFullYear()}-${String(
                     now.getMonth() + 1
-                ).padStart(2, '0')}`;
+                ).padStart(
+                    2,
+                    '0'
+                )}`;
 
 
             document
@@ -1935,16 +2164,17 @@
 
                     const {
                         error: balanceError
-                    } = await dbClient
-                        .from('users')
-                        .update({
-                            balance:
-                                newBal
-                        })
-                        .eq(
-                            'id',
-                            currentUserData.id
-                        );
+                    } =
+                        await dbClient
+                            .from('users')
+                            .update({
+                                balance:
+                                    newBal
+                            })
+                            .eq(
+                                'id',
+                                currentUserData.id
+                            );
 
 
                     if (balanceError)
@@ -1953,29 +2183,30 @@
 
                     const {
                         error: withdrawalError
-                    } = await dbClient
-                        .from('withdrawals')
-                        .insert([{
-                            user_id:
-                                currentUserData.id,
+                    } =
+                        await dbClient
+                            .from('withdrawals')
+                            .insert([{
+                                user_id:
+                                    currentUserData.id,
 
-                            username:
-                                tg.initDataUnsafe?.user?.username ||
-                                tg.initDataUnsafe?.user?.first_name ||
-                                'User',
+                                username:
+                                    tg.initDataUnsafe?.user?.username ||
+                                    tg.initDataUnsafe?.user?.first_name ||
+                                    'User',
 
-                            amount:
-                                amount,
+                                amount:
+                                    amount,
 
-                            method:
-                                method,
+                                method:
+                                    method,
 
-                            details:
-                                details,
+                                details:
+                                    details,
 
-                            status:
-                                'pending'
-                        }]);
+                                status:
+                                    'pending'
+                            }]);
 
 
                     if (withdrawalError)
@@ -2027,9 +2258,7 @@
 
                 } catch (e) {
 
-                    console.error(
-                        e
-                    );
+                    console.error(e);
 
                     safeAlert(
                         "Error submitting request."
@@ -2062,19 +2291,21 @@
                 const {
                     data,
                     error
-                } = await dbClient
-                    .from('withdrawals')
-                    .select('*')
-                    .eq(
-                        'user_id',
-                        currentUserData.id
-                    )
-                    .order(
-                        'created_at',
-                        {
-                            ascending: false
-                        }
-                    );
+                } =
+                    await dbClient
+                        .from('withdrawals')
+                        .select('*')
+                        .eq(
+                            'user_id',
+                            currentUserData.id
+                        )
+                        .order(
+                            'created_at',
+                            {
+                                ascending:
+                                    false
+                            }
+                        );
 
 
                 if (error)
@@ -2097,79 +2328,82 @@
                     '';
 
 
-                data.forEach(w => {
+                data.forEach(
+                    w => {
 
-                    const dateStr =
-                        new Date(
-                            w.created_at
-                        ).toLocaleDateString();
-
-
-                    let color =
-                        'text-amber-400';
-
-                    let icon =
-                        'fa-clock';
+                        const dateStr =
+                            new Date(
+                                w.created_at
+                            )
+                                .toLocaleDateString();
 
 
-                    if (
-                        w.status ===
-                        'approved'
-                    ) {
+                        let color =
+                            'text-amber-400';
 
-                        color =
-                            'text-emerald-400';
-
-                        icon =
-                            'fa-check-double';
-                    }
+                        let icon =
+                            'fa-clock';
 
 
-                    if (
-                        w.status ===
-                        'rejected'
-                    ) {
+                        if (
+                            w.status ===
+                            'approved'
+                        ) {
 
-                        color =
-                            'text-red-400';
+                            color =
+                                'text-emerald-400';
 
-                        icon =
-                            'fa-xmark';
-                    }
+                            icon =
+                                'fa-check-double';
+                        }
 
 
-                    list.innerHTML += `
+                        if (
+                            w.status ===
+                            'rejected'
+                        ) {
 
-                        <div class="glass-panel p-4 flex justify-between items-center mb-3">
+                            color =
+                                'text-red-400';
 
-                            <div>
+                            icon =
+                                'fa-xmark';
+                        }
 
-                                <div class="font-bold text-white text-sm mb-1">
-                                    ${w.method}
+
+                        list.innerHTML += `
+
+                            <div class="glass-panel p-4 flex justify-between items-center mb-3">
+
+                                <div>
+
+                                    <div class="font-bold text-white text-sm mb-1">
+                                        ${w.method}
+                                    </div>
+
+                                    <div class="text-[10px] text-slate-400">
+                                        ${dateStr}
+                                    </div>
+
                                 </div>
 
-                                <div class="text-[10px] text-slate-400">
-                                    ${dateStr}
+                                <div class="text-right">
+
+                                    <div class="font-bold text-white mb-1">
+                                        $${Number(w.amount || 0).toFixed(2)}
+                                    </div>
+
+                                    <div class="text-[10px] font-bold uppercase ${color}">
+                                        <i class="fa-solid ${icon} mr-1"></i>
+                                        ${w.status}
+                                    </div>
+
                                 </div>
 
                             </div>
-
-                            <div class="text-right">
-
-                                <div class="font-bold text-white mb-1">
-                                    $${Number(w.amount || 0).toFixed(2)}
-                                </div>
-
-                                <div class="text-[10px] font-bold uppercase ${color}">
-                                    <i class="fa-solid ${icon} mr-1"></i>
-                                    ${w.status}
-                                </div>
-
-                            </div>
-
-                        </div>
-                    `;
-                });
+                        `;
+                    }
+                );
 
             } catch (e) {
 
@@ -2198,20 +2432,22 @@
                 const {
                     data,
                     error
-                } = await dbClient
-                    .from('links')
-                    .select('*')
-                    .eq(
-                        'user_id',
-                        currentUserData.id
-                    )
-                    .order(
-                        'created_at',
-                        {
-                            ascending: false
-                        }
-                    )
-                    .limit(20);
+                } =
+                    await dbClient
+                        .from('links')
+                        .select('*')
+                        .eq(
+                            'user_id',
+                            currentUserData.id
+                        )
+                        .order(
+                            'created_at',
+                            {
+                                ascending:
+                                    false
+                            }
+                        )
+                        .limit(20);
 
 
                 if (error)
@@ -2234,62 +2470,64 @@
                     '';
 
 
-                data.forEach(l => {
+                data.forEach(
+                    l => {
 
-                    const shortUrl =
-                        `https://t.me/${BOT_USERNAME}/${APP_SHORT_NAME}?startapp=link_${l.short_id}`;
+                        const shortUrl =
+                            `https://t.me/${BOT_USERNAME}/${APP_SHORT_NAME}?startapp=link_${l.short_id}`;
 
 
-                    list.innerHTML += `
+                        list.innerHTML += `
 
-                        <div class="glass-panel p-4 mb-3">
+                            <div class="glass-panel p-4 mb-3">
 
-                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex justify-between items-start mb-2">
 
-                                <div class="truncate w-3/4">
+                                    <div class="truncate w-3/4">
 
-                                    <span class="text-indigo-400 text-xs block truncate">
-                                        ${shortUrl}
-                                    </span>
+                                        <span class="text-indigo-400 text-xs block truncate">
+                                            ${shortUrl}
+                                        </span>
 
-                                    <span class="text-[10px] text-slate-500 block truncate">
-                                        ${l.original_url}
-                                    </span>
+                                        <span class="text-[10px] text-slate-500 block truncate">
+                                            ${l.original_url}
+                                        </span>
+
+                                    </div>
+
+                                    <button
+                                        onclick="copyText('${shortUrl}')"
+                                        class="bg-slate-800 p-2 rounded text-indigo-400 hover:text-white"
+                                    >
+                                        <i class="fa-solid fa-copy"></i>
+                                    </button>
 
                                 </div>
 
-                                <button
-                                    onclick="copyText('${shortUrl}')"
-                                    class="bg-slate-800 p-2 rounded text-indigo-400 hover:text-white"
-                                >
-                                    <i class="fa-solid fa-copy"></i>
-                                </button>
+                                <div class="flex space-x-4 pt-2 border-t border-slate-700/50 text-xs">
+
+                                    <div>
+                                        <i class="fa-solid fa-eye text-slate-400"></i>
+
+                                        <span class="text-white font-bold">
+                                            ${l.clicks || 0}
+                                        </span>
+                                    </div>
+
+                                    <div>
+                                        <i class="fa-solid fa-coins text-emerald-400"></i>
+
+                                        <span class="text-emerald-400 font-bold">
+                                            $${parseFloat(l.earnings || 0).toFixed(4)}
+                                        </span>
+                                    </div>
+
+                                </div>
 
                             </div>
-
-                            <div class="flex space-x-4 pt-2 border-t border-slate-700/50 text-xs">
-
-                                <div>
-                                    <i class="fa-solid fa-eye text-slate-400"></i>
-
-                                    <span class="text-white font-bold">
-                                        ${l.clicks || 0}
-                                    </span>
-                                </div>
-
-                                <div>
-                                    <i class="fa-solid fa-coins text-emerald-400"></i>
-
-                                    <span class="text-emerald-400 font-bold">
-                                        $${parseFloat(l.earnings || 0).toFixed(4)}
-                                    </span>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    `;
-                });
+                        `;
+                    }
+                );
 
             } catch (e) {
 
@@ -2325,19 +2563,21 @@
                 const {
                     data: refs,
                     error: refsError
-                } = await dbClient
-                    .from('referrals')
-                    .select('*')
-                    .eq(
-                        'referrer_tg_id',
-                        currentUserData.telegram_id
-                    )
-                    .order(
-                        'created_at',
-                        {
-                            ascending: false
-                        }
-                    );
+                } =
+                    await dbClient
+                        .from('referrals')
+                        .select('*')
+                        .eq(
+                            'referrer_tg_id',
+                            currentUserData.telegram_id
+                        )
+                        .order(
+                            'created_at',
+                            {
+                                ascending:
+                                    false
+                            }
+                        );
 
 
                 if (refsError)
@@ -2351,6 +2591,7 @@
 
                     listContainer.innerHTML =
                         '<div class="text-center text-slate-500 py-6 text-sm glass-panel">You have not referred anyone yet.</div>';
+
 
                     document
                         .getElementById(
@@ -2372,15 +2613,16 @@
 
                 const {
                     data: usersData
-                } = await dbClient
-                    .from('users')
-                    .select(
-                        'telegram_id, first_name'
-                    )
-                    .in(
-                        'telegram_id',
-                        refIds
-                    );
+                } =
+                    await dbClient
+                        .from('users')
+                        .select(
+                            'telegram_id, first_name'
+                        )
+                        .in(
+                            'telegram_id',
+                            refIds
+                        );
 
 
                 let userNames = {};
@@ -2395,6 +2637,7 @@
                                 u.telegram_id
                             ] =
                             u.first_name;
+
                         }
                     );
                 }
@@ -2404,34 +2647,36 @@
                     '';
 
 
-                refs.forEach(ref => {
+                refs.forEach(
+                    ref => {
 
-                    const uName =
-                        userNames[
-                            ref.referred_tg_id
-                        ] ||
-                        "Unknown User";
+                        const uName =
+                            userNames[
+                                ref.referred_tg_id
+                            ] ||
+                            "Unknown User";
 
 
-                    listContainer.innerHTML += `
+                        listContainer.innerHTML += `
 
-                        <div class="glass-panel p-4 flex justify-between items-center mb-3">
+                            <div class="glass-panel p-4 flex justify-between items-center mb-3">
 
-                            <span class="font-bold text-white text-sm">
+                                <span class="font-bold text-white text-sm">
 
-                                <i class="fa-solid fa-user text-slate-500 mr-2"></i>
+                                    <i class="fa-solid fa-user text-slate-500 mr-2"></i>
 
-                                ${uName}
+                                    ${uName}
 
-                            </span>
+                                </span>
 
-                            <span class="bg-amber-500/20 text-amber-400 px-2 py-1 rounded text-[10px] font-bold">
-                                Registered
-                            </span>
+                                <span class="bg-amber-500/20 text-amber-400 px-2 py-1 rounded text-[10px] font-bold">
+                                    Registered
+                                </span>
 
-                        </div>
-                    `;
-                });
+                            </div>
+                        `;
+                    }
+                );
 
 
                 document
@@ -2514,13 +2759,14 @@
 
                 const {
                     data: links
-                } = await dbClient
-                    .from('links')
-                    .select('id')
-                    .eq(
-                        'user_id',
-                        currentUserData.id
-                    );
+                } =
+                    await dbClient
+                        .from('links')
+                        .select('id')
+                        .eq(
+                            'user_id',
+                            currentUserData.id
+                        );
 
 
                 if (
@@ -2543,21 +2789,24 @@
 
                 const {
                     data: clicks
-                } = await dbClient
-                    .from('click_logs')
-                    .select('created_at')
-                    .in(
-                        'link_id',
-                        linkIds
-                    )
-                    .gte(
-                        'created_at',
-                        startDate
-                    )
-                    .lt(
-                        'created_at',
-                        endDate
-                    );
+                } =
+                    await dbClient
+                        .from('click_logs')
+                        .select(
+                            'created_at'
+                        )
+                        .in(
+                            'link_id',
+                            linkIds
+                        )
+                        .gte(
+                            'created_at',
+                            startDate
+                        )
+                        .lt(
+                            'created_at',
+                            endDate
+                        );
 
 
                 if (
@@ -2575,37 +2824,41 @@
                 let dailyData = {};
 
 
-                clicks.forEach(c => {
+                clicks.forEach(
+                    c => {
 
-                    const dateStr =
-                        new Date(
-                            c.created_at
-                        ).toLocaleDateString();
+                        const dateStr =
+                            new Date(
+                                c.created_at
+                            )
+                                .toLocaleDateString();
 
 
-                    if (
-                        !dailyData[
-                            dateStr
-                        ]
-                    ) {
+                        if (
+                            !dailyData[
+                                dateStr
+                            ]
+                        ) {
+
+                            dailyData[
+                                dateStr
+                            ] =
+                            0;
+                        }
+
 
                         dailyData[
                             dateStr
-                        ] =
-                        0;
+                        ] +=
+                            (
+                                Number(
+                                    adminSettings.cpm ||
+                                    0
+                                ) /
+                                1000
+                            );
                     }
-
-
-                    dailyData[
-                        dateStr
-                    ] +=
-                        (
-                            Number(
-                                adminSettings.cpm ||
-                                0
-                            ) / 1000
-                        );
-                });
+                );
 
 
                 listDiv.innerHTML =
@@ -2652,15 +2905,23 @@
         }
 
 
-        // ==========================================
+        // ==================================================
         // AD FLOW
-        // ==========================================
+        // ==================================================
 
         function startAdFlow() {
 
             document
                 .getElementById(
                     'ui-loading'
+                )
+                .classList
+                .add('hidden');
+
+
+            document
+                .getElementById(
+                    'ui-main-app'
                 )
                 .classList
                 .add('hidden');
@@ -2679,6 +2940,10 @@
             setupAdStep();
         }
 
+
+        // ==================================================
+        // SETUP AD STEP
+        // ==================================================
 
         function setupAdStep() {
 
@@ -2724,8 +2989,19 @@
                 );
 
 
+            const status =
+                document.getElementById(
+                    'ad-provider-status'
+                );
+
+
             badge.innerText =
                 `Ad ${currentAdStep} of ${totalAdsRequired}`;
+
+
+            badge.classList.remove(
+                'hidden'
+            );
 
 
             timerContainer.classList.remove(
@@ -2753,6 +3029,11 @@
             );
 
 
+            btn.classList.remove(
+                'hidden'
+            );
+
+
             document
                 .getElementById(
                     'ad-step-title'
@@ -2761,12 +3042,26 @@
                 "Please Wait...";
 
 
+            status.innerText =
+                "Preparing Monetag advertisement...";
+
+
             let timeLeft =
                 parseInt(
                     adminSettings.ad_timer ||
                     5,
                     10
                 );
+
+
+            if (
+                isNaN(timeLeft) ||
+                timeLeft < 1
+            ) {
+
+                timeLeft = 5;
+
+            }
 
 
             timerText.innerText =
@@ -2794,6 +3089,7 @@
                     () => {
 
                         timeLeft--;
+
 
                         timerText.innerText =
                             Math.max(
@@ -2830,28 +3126,30 @@
         }
 
 
-        // ==========================================
+        // ==================================================
         // AD AVAILABILITY
-        // ==========================================
+        // ==================================================
 
         function checkAdAvailability(
             btn,
             timerEl
         ) {
 
+            // Monetag is the MAIN required ad.
             const monetagAvailable =
                 typeof show_11825523 ===
                 'function';
 
 
+            // AdsGram is optional interstitial.
             const adsGramAvailable =
                 !!AdsGramController;
 
 
-            // যদি কোনো ad provider-ই না থাকে
+            // If Monetag is unavailable,
+            // do NOT unlock the link.
             if (
-                !monetagAvailable &&
-                !adsGramAvailable
+                !monetagAvailable
             ) {
 
                 document
@@ -2859,7 +3157,9 @@
                         'ad-blocker-warning'
                     )
                     .classList
-                    .remove('hidden');
+                    .remove(
+                        'hidden'
+                    );
 
 
                 document
@@ -2867,7 +3167,15 @@
                         'ad-step-title'
                     )
                     .innerText =
-                    "Ads Unavailable";
+                    "Monetag Ad Unavailable";
+
+
+                document
+                    .getElementById(
+                        'ad-provider-status'
+                    )
+                    .innerText =
+                    "Main advertisement is unavailable. Please try again later.";
 
 
                 btn.classList.add(
@@ -2882,8 +3190,27 @@
             }
 
 
+            // Monetag available
             timerEl.innerHTML =
                 '<i class="fa-solid fa-play text-indigo-500"></i>';
+
+
+            document
+                .getElementById(
+                    'ad-step-title'
+                )
+                .innerText =
+                "Ready to Watch";
+
+
+            document
+                .getElementById(
+                    'ad-provider-status'
+                )
+                .innerText =
+                adsGramAvailable
+                    ? "Monetag + AdsGram"
+                    : "Monetag";
 
 
             btn.disabled =
@@ -2895,7 +3222,7 @@
 
 
             btn.innerHTML =
-                "Click to Watch Ad";
+                '<i class="fa-solid fa-play mr-2"></i> Click to Watch Ad';
 
 
             btn.onclick =
@@ -2903,9 +3230,9 @@
         }
 
 
-        // ==========================================
+        // ==================================================
         // EXECUTE ADS
-        // ==========================================
+        // ==================================================
 
         async function executeAdClick() {
 
@@ -2927,6 +3254,13 @@
                 );
 
 
+            const status =
+                document.getElementById(
+                    'ad-provider-status'
+                );
+
+
+            // Prevent double click
             btn.disabled =
                 true;
 
@@ -2945,31 +3279,19 @@
             );
 
 
-            // ======================================
-            // 1. ADSGRAM INTERSTITIAL
-            // ======================================
-
-            await showAdsGramInterstitial();
-
-
-            // Small delay between ads
-            await new Promise(
-                resolve =>
-                    setTimeout(
-                        resolve,
-                        800
-                    )
-            );
-
-
-            // ======================================
-            // 2. MONETAG
-            // ======================================
+            // ==================================================
+            // 1. MONETAG MAIN AD
+            // ==================================================
 
             if (
                 typeof show_11825523 !==
                 'function'
             ) {
+
+                console.error(
+                    'Monetag SDK unavailable.'
+                );
+
 
                 btn.disabled =
                     false;
@@ -2990,7 +3312,7 @@
 
 
                 safeAlert(
-                    "Monetag ad is not available."
+                    "Monetag ad is not available. Please try again."
                 );
 
 
@@ -3000,16 +3322,21 @@
 
             try {
 
+                status.innerText =
+                    "Showing Monetag advertisement...";
+
+
+                console.log(
+                    'Starting Monetag ad...'
+                );
+
+
                 await show_11825523();
 
 
                 console.log(
-                    'Monetag ad completed.'
+                    'Monetag ad completed successfully.'
                 );
-
-
-                // Ad step success
-                handleAdSuccess();
 
 
             } catch (error) {
@@ -3038,18 +3365,99 @@
                     '<i class="fa-solid fa-rotate-right mr-2"></i> Try Again';
 
 
+                status.innerText =
+                    "Monetag ad failed. Please try again.";
+
+
                 safeAlert(
                     "Ad could not be completed. Please try again."
                 );
+
+
+                return;
             }
+
+
+            // ==================================================
+            // SMALL DELAY
+            // ==================================================
+
+            await new Promise(
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        800
+                    )
+            );
+
+
+            // ==================================================
+            // 2. ADSGRAM INTERSTITIAL
+            // ==================================================
+
+            if (
+                AdsGramController
+            ) {
+
+                try {
+
+                    status.innerText =
+                        "Loading AdsGram interstitial...";
+
+
+                    console.log(
+                        'Starting AdsGram interstitial...'
+                    );
+
+
+                    await showAdsGramInterstitial();
+
+
+                    console.log(
+                        'AdsGram interstitial finished.'
+                    );
+
+
+                } catch (error) {
+
+                    console.log(
+                        'AdsGram error. Continuing:',
+                        error
+                    );
+
+                }
+
+            } else {
+
+                console.log(
+                    'AdsGram controller unavailable. Continuing with Monetag.'
+                );
+
+            }
+
+
+            // ==================================================
+            // 3. AD SUCCESS
+            // ==================================================
+
+            status.innerText =
+                "Advertisement completed.";
+
+
+            handleAdSuccess();
         }
 
 
-        // ==========================================
+        // ==================================================
         // AD SUCCESS
-        // ==========================================
+        // ==================================================
 
         function handleAdSuccess() {
+
+            console.log(
+                `Ad step ${currentAdStep} completed.`
+            );
+
 
             if (
                 currentAdStep <
@@ -3063,13 +3471,14 @@
             } else {
 
                 showFinalLink();
+
             }
         }
 
 
-        // ==========================================
+        // ==================================================
         // FINAL LINK
-        // ==========================================
+        // ==================================================
 
         async function showFinalLink() {
 
@@ -3099,6 +3508,14 @@
 
             document
                 .getElementById(
+                    'ad-provider-status'
+                )
+                .innerText =
+                "Advertisement completed successfully.";
+
+
+            document
+                .getElementById(
                     'ad-step-title'
                 )
                 .innerText =
@@ -3116,9 +3533,9 @@
             );
 
 
-            // ======================================
+            // ==================================================
             // SELF CLICK
-            // ======================================
+            // ==================================================
 
             if (
                 window.invalidClickReason ===
@@ -3131,9 +3548,10 @@
 
             }
 
-            // ======================================
+
+            // ==================================================
             // DUPLICATE
-            // ======================================
+            // ==================================================
 
             else if (
                 window.invalidClickReason ===
@@ -3146,9 +3564,10 @@
 
             }
 
-            // ======================================
+
+            // ==================================================
             // REWARD
-            // ======================================
+            // ==================================================
 
             else {
 
@@ -3198,6 +3617,7 @@
                             rewardData
                         );
 
+
                         safeAlert(
                             "⚠️ Reward could not be processed."
                         );
@@ -3217,6 +3637,7 @@
                         e
                     );
 
+
                     safeAlert(
                         "⚠️ Reward server error."
                     );
@@ -3224,25 +3645,26 @@
             }
 
 
-            // ======================================
-            // ORIGINAL URL
-            // ======================================
+            // ==================================================
+            // GET ORIGINAL URL
+            // ==================================================
 
             try {
 
                 const {
                     data,
                     error
-                } = await dbClient
-                    .from('links')
-                    .select(
-                        'original_url'
-                    )
-                    .eq(
-                        'short_id',
-                        window.currentShortId
-                    )
-                    .single();
+                } =
+                    await dbClient
+                        .from('links')
+                        .select(
+                            'original_url'
+                        )
+                        .eq(
+                            'short_id',
+                            window.currentShortId
+                        )
+                        .single();
 
 
                 if (error)
@@ -3261,6 +3683,7 @@
                                 data.original_url
                             );
                         };
+
                 }
 
             } catch (e) {
@@ -3270,20 +3693,22 @@
                     e
                 );
 
+
                 getLinkBtn.onclick =
                     () => {
 
                         safeAlert(
                             "Unable to open the link."
                         );
+
                     };
             }
         }
 
 
-        // ==========================================
-        // START
-        // ==========================================
+        // ==================================================
+        // START APPLICATION
+        // ==================================================
 
         window.addEventListener(
             'load',
