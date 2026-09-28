@@ -377,7 +377,11 @@ export default async function handler(req, res) {
         );
 
         return res.status(500).json({
-            error: error.message
-        });
+    error: 'Could not create reward record',
+    code: rewardLogError?.code || null,
+    message: rewardLogError?.message || null,
+    details: rewardLogError?.details || null,
+    hint: rewardLogError?.hint || null
+});
     }
 }
