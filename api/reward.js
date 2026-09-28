@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
 
-    // শুধুমাত্র POST request
     if (req.method !== 'POST') {
         return res.status(405).json({
             error: 'Method Not Allowed'
@@ -11,7 +10,6 @@ export default async function handler(req, res) {
 
     const { short_id, clicker_tg_id } = req.body;
 
-    // Telegram ID ছাড়া reward দেওয়া হবে না
     if (!short_id) {
         return res.status(400).json({
             error: 'short_id is required'
@@ -24,7 +22,6 @@ export default async function handler(req, res) {
         });
     }
 
-    // Supabase Environment Variables
     const supabaseUrl = process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 
@@ -46,10 +43,7 @@ export default async function handler(req, res) {
             supabaseKey.trim()
         );
 
-        // =====================================================
         // 1. LINK DATA
-        // =====================================================
-
         const {
             data: linkData,
             error: linkErr
@@ -65,15 +59,12 @@ export default async function handler(req, res) {
             });
         }
 
-
-        // =====================================================
-        // 2. CHECK DAILY DUPLICATE REWARD
-        // =====================================================
-
+        // 2. TODAY DATE
         const today = new Date()
             .toISOString()
             .split('T')[0];
 
+        // 3. CHECK EXISTING DAILY REWARD
         const {
             data: existingReward,
             error: existingRewardError
@@ -86,17 +77,22 @@ export default async function handler(req, res) {
             .maybeSingle();
 
         if (existingRewardError) {
+
             console.error(
                 'Daily reward check error:',
                 existingRewardError
             );
 
             return res.status(500).json({
-                error: 'Could not verify daily reward'
+                error: 'Daily reward check failed',
+                code: existingRewardError.code || null,
+                message: existingRewardError.message || null,
+                details: existingRewardError.details || null,
+                hint: existingRewardError.hint || null
             });
         }
 
-        // একই user + একই link + একই দিন
+        // SAME USER + SAME LINK + SAME DAY
         if (existingReward) {
             return res.status(200).json({
                 success: false,
@@ -105,11 +101,7 @@ export default async function handler(req, res) {
             });
         }
 
-
-        // =====================================================
-        // 3. ADMIN SETTINGS / CPM
-        // =====================================================
-
+        // 4. ADMIN SETTINGS
         const {
             data: adminSettings
         } = await supabase
@@ -125,23 +117,7 @@ export default async function handler(req, res) {
 
         const earn_amount = cpm / 1000;
 
-
-        // =====================================================
-        // 4. CREATE DAILY REWARD LOG
-        // =====================================================
-
-        /*
-         * এই unique constraint নিশ্চিত করবে:
-         *
-         * একই link
-         * +
-         * একই Telegram ID
-         * +
-         * একই দিন
-         *
-         * = মাত্র ১টি reward
-         */
-
+        // 5. CREATE DAILY REWARD LOG
         const {
             data: rewardLog,
             error: rewardLogError
@@ -157,11 +133,13 @@ export default async function handler(req, res) {
 
         if (rewardLogError) {
 
-            // Duplicate হলে reward দেওয়া হবে না
-            if (
-                rewardLogError.code === '23505' ||
-                rewardLogError.message?.includes('daily_reward_logs_unique')
-            ) {
+            console.error(
+                'Reward log insert error:',
+                rewardLogError
+            );
+
+            // Duplicate request
+            if (rewardLogError.code === '23505') {
                 return res.status(200).json({
                     success: false,
                     already_rewarded: true,
@@ -169,21 +147,16 @@ export default async function handler(req, res) {
                 });
             }
 
-            console.error(
-                'Reward log insert error:',
-                rewardLogError
-            );
-
             return res.status(500).json({
-                error: 'Could not create reward record'
+                error: 'Could not create reward record',
+                code: rewardLogError.code || null,
+                message: rewardLogError.message || null,
+                details: rewardLogError.details || null,
+                hint: rewardLogError.hint || null
             });
         }
 
-
-        // =====================================================
-        // 5. CLICK LOG
-        // =====================================================
-
+        // 6. CLICK LOG
         const {
             error: clickLogError
         } = await supabase
@@ -200,11 +173,7 @@ export default async function handler(req, res) {
             );
         }
 
-
-        // =====================================================
-        // 6. UPDATE LINK CLICKS + EARNINGS
-        // =====================================================
-
+        // 7. UPDATE LINK
         const {
             error: linkUpdateError
         } = await supabase
@@ -223,11 +192,7 @@ export default async function handler(req, res) {
             );
         }
 
-
-        // =====================================================
-        // 7. LINK OWNER USER DATA
-        // =====================================================
-
+        // 8. USER DATA
         const {
             data: userData
         } = await supabase
@@ -236,19 +201,14 @@ export default async function handler(req, res) {
             .eq('id', linkData.user_id)
             .single();
 
-
         if (userData) {
 
-            // =================================================
-            // 8. UPDATE USER EARNINGS
-            // =================================================
-
+            // 9. UPDATE USER EARNINGS
             const {
                 error: userUpdateError
             } = await supabase
                 .from('users')
                 .update({
-
                     balance:
                         (userData.balance || 0)
                         + earn_amount,
@@ -268,7 +228,6 @@ export default async function handler(req, res) {
                     today_clicks:
                         (userData.today_clicks || 0)
                         + 1
-
                 })
                 .eq('id', userData.id);
 
@@ -279,11 +238,7 @@ export default async function handler(req, res) {
                 );
             }
 
-
-            // =================================================
-            // 9. REFERRAL COMMISSION
-            // =================================================
-
+            // 10. REFERRAL COMMISSION
             const referPercent =
                 adminSettings &&
                 adminSettings.refer_percent
@@ -303,7 +258,6 @@ export default async function handler(req, res) {
                     )
                     .single();
 
-
                 if (
                     referralData &&
                     referralData.referrer_tg_id
@@ -320,18 +274,15 @@ export default async function handler(req, res) {
                         )
                         .single();
 
-
                     if (referrerData) {
 
                         const referComm =
                             earn_amount *
                             (referPercent / 100);
 
-
                         await supabase
                             .from('users')
                             .update({
-
                                 balance:
                                     (referrerData.balance || 0)
                                     + referComm,
@@ -339,7 +290,6 @@ export default async function handler(req, res) {
                                 total_earnings:
                                     (referrerData.total_earnings || 0)
                                     + referComm
-
                             })
                             .eq(
                                 'id',
@@ -350,24 +300,14 @@ export default async function handler(req, res) {
             }
         }
 
-
-        // =====================================================
-        // 10. SUCCESS
-        // =====================================================
-
+        // 11. SUCCESS
         return res.status(200).json({
-
             success: true,
-
             already_rewarded: false,
-
             reward_amount: earn_amount,
-
             message:
                 'Reward, Views & Commission added successfully.'
-
         });
-
 
     } catch (error) {
 
@@ -377,11 +317,8 @@ export default async function handler(req, res) {
         );
 
         return res.status(500).json({
-    error: 'Could not create reward record',
-    code: rewardLogError?.code || null,
-    message: rewardLogError?.message || null,
-    details: rewardLogError?.details || null,
-    hint: rewardLogError?.hint || null
-});
+            error: 'Reward API failed',
+            message: error.message || null
+        });
     }
 }
