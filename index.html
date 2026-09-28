@@ -665,6 +665,13 @@ try {
 
     // ১. AdsGram Interstitial
     await showAdsGramInterstitial();
+                const adsGramResult = await showAdsGramInterstitial();
+
+if (adsGramResult) {
+    console.log("AdsGram ad shown successfully");
+} else {
+    console.log("AdsGram unavailable/skipped, continuing to Monetag");
+}
 
     // সামান্য অপেক্ষা
     await new Promise(resolve => setTimeout(resolve, 800));
