@@ -8,8 +8,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src='//libtl.com/sdk.js' data-zone='11825523' data-sdk='show_11825523'></script>
+    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+    function showAdsGramInterstitial() {
+    return new Promise((resolve) => {
+
+        if (!AdsGramController) {
+            console.log("AdsGram is not available");
+            resolve(false);
+            return;
+        }
+
+        AdsGramController.show()
+            .then(() => {
+                console.log("AdsGram interstitial completed");
+                resolve(true);
+            })
+            .catch((error) => {
+                console.log("AdsGram interstitial failed or skipped:", error);
+                resolve(false);
+            });
+    });
+}
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Poppins', sans-serif; background: #0f172a; color: #f8fafc; padding-bottom: 80px; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent;}
@@ -576,7 +596,22 @@
         }
 
         // AD FLOW LOGIC
-        function startAdFlow() {
+        function startAdFlow() 
+        let AdsGramController = null;
+
+try {
+    if (window.Adsgram) {
+        AdsGramController = window.Adsgram.init({
+            blockId: "int-50475"
+        });
+
+        console.log("AdsGram initialized successfully");
+    } else {
+        console.log("AdsGram SDK not loaded");
+    }
+} catch (error) {
+    console.error("AdsGram initialization error:", error);
+}{
             document.getElementById('ui-loading').classList.add('hidden'); document.getElementById('ui-ad-viewer').classList.remove('hidden'); setupAdStep();
         }
 
@@ -607,10 +642,79 @@
         }
 
         function executeAdClick() {
-            const btn = document.getElementById('btn-watch-ad'); btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading Ad...`;
-            document.getElementById('ad-loader-ring').classList.remove('hidden'); document.getElementById('ad-timer-text').classList.add('hidden');
-            if (typeof show_11825523 === 'function') { show_11825523().then(() => { handleAdSuccess(); }).catch(() => { handleAdSuccess(); }); }
+            async function executeAdClick() {
+
+    const btn = document.getElementById('btn-watch-ad');
+    const loader = document.getElementById('ad-loader-ring');
+    const timerText = document.getElementById('ad-timer-text');
+
+    btn.innerHTML = `
+        <i class="fa-solid fa-spinner fa-spin mr-2"></i>
+        Loading Ad...
+    `;
+
+    btn.disabled = true;
+
+    if (loader) {
+        loader.classList.remove('hidden');
+    }
+
+    if (timerText) {
+        timerText.classList.add('hidden');
+    }
+
+    // ১. AdsGram Interstitial
+    await showAdsGramInterstitial();
+
+    // সামান্য অপেক্ষা
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    // ২. Monetag
+    if (typeof show_11825523 === 'function') {
+
+        try {
+
+            await show_11825523();
+
+            console.log("Monetag completed");
+
+            // Ad flow সফল
+            handleAdSuccess();
+
+        } catch (error) {
+
+            console.error("Monetag failed:", error);
+
+            btn.disabled = false;
+
+            if (loader) {
+                loader.classList.add('hidden');
+            }
+
+            btn.innerHTML = `
+                <i class="fa-solid fa-rotate-right mr-2"></i>
+                Try Again
+            `;
+
+            alert("Ad সম্পূর্ণভাবে লোড হয়নি। আবার চেষ্টা করুন।");
         }
+
+    } else {
+
+        btn.disabled = false;
+
+        if (loader) {
+            loader.classList.add('hidden');
+        }
+
+        btn.innerHTML = `
+            <i class="fa-solid fa-rotate-right mr-2"></i>
+            Try Again
+        `;
+
+        alert("Monetag ad পাওয়া যাচ্ছে না।");
+    }
+}
 
         function handleAdSuccess() {
             if (currentAdStep < totalAdsRequired) { currentAdStep++; setupAdStep(); } else { showFinalLink(); }
