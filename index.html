@@ -3607,22 +3607,34 @@
                             .json();
 
 
-                    if (
-                        !rewardResponse.ok ||
-                        !rewardData.success
-                    ) {
+                    if (rewardData.already_rewarded) {
 
-                        console.error(
-                            'Reward API failed:',
-                            rewardData
-                        );
+    console.log(
+        'Reward already received today for this link:',
+        rewardData
+    );
 
+} else if (
+    !rewardResponse.ok ||
+    !rewardData.success
+) {
 
-                        safeAlert(
-                            "⚠️ Reward could not be processed."
-                        );
+    console.error(
+        'Reward API failed:',
+        rewardData
+    );
 
-                    } else {
+    safeAlert(
+        "⚠️ Reward could not be processed."
+    );
+
+} else {
+
+    console.log(
+        'Reward added successfully:',
+        rewardData
+    );
+} {
 
                         console.log(
                             'Reward added:',
