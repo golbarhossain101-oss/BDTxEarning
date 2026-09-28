@@ -728,23 +728,74 @@ if (adsGramResult) {
         }
 
         async function showFinalLink() {
-            document.getElementById('btn-watch-ad').classList.add('hidden'); document.getElementById('ad-timer-container').classList.add('hidden');
-            document.getElementById('ad-progress-badge').classList.add('hidden'); document.getElementById('ad-step-title').innerText = "Link Unlocked!";
-            
-            const getLinkBtn = document.getElementById('btn-get-link'); getLinkBtn.classList.remove('hidden');
-            
-            if (window.invalidClickReason === "self") {
-                safeAlert("⚠️ This is your own link! Earnings will not be added.");
-            } else if (window.invalidClickReason === "duplicate") {
-                safeAlert("⚠️ You already viewed this link! Earnings won't be duplicated.");
+    document.getElementById('btn-watch-ad').classList.add('hidden');
+    document.getElementById('ad-timer-container').classList.add('hidden');
+    document.getElementById('ad-progress-badge').classList.add('hidden');
+    document.getElementById('ad-step-title').innerText = "Link Unlocked!";
+
+    const getLinkBtn = document.getElementById('btn-get-link');
+    getLinkBtn.classList.remove('hidden');
+
+    // Self click / duplicate click হলে reward দেওয়া হবে না
+    if (window.invalidClickReason === "self") {
+
+        safeAlert("⚠️ This is your own link! Earnings will not be added.");
+
+    } else if (window.invalidClickReason === "duplicate") {
+
+        safeAlert("⚠️ You already viewed this link! Earnings won't be duplicated.");
+
+    } else {
+
+        const clickerId = tg.initDataUnsafe?.user?.id || 0;
+
+        try {
+
+            const rewardResponse = await fetch(`${VERCEL_API_URL}/reward`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    short_id: window.currentShortId,
+                    clicker_tg_id: clickerId
+                })
+            });
+
+            const rewardData = await rewardResponse.json();
+
+            if (!rewardResponse.ok || !rewardData.success) {
+                console.error("Reward API failed:", rewardData);
+                safeAlert("⚠️ Reward could not be processed.");
             } else {
-                let clickerId = tg.initDataUnsafe?.user?.id || 0;
-                try { fetch(`${VERCEL_API_URL}/reward`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ short_id: window.currentShortId, clicker_tg_id: clickerId }) }); } catch(e){}
+                console.log("Reward successfully added:", rewardData);
             }
 
-            const { data } = await dbClient.from('links').select('original_url').eq('short_id', window.currentShortId).single();
-            if(data) getLinkBtn.onclick = () => tg.openLink(data.original_url);
+        } catch (error) {
+
+            console.error("Reward API error:", error);
+            safeAlert("⚠️ Reward server error. Please try again.");
         }
+    }
+
+    // Original link বের করা
+    const { data, error } = await dbClient
+        .from('links')
+        .select('original_url')
+        .eq('short_id', window.currentShortId)
+        .single();
+
+    if (error) {
+        console.error("Original URL error:", error);
+        return;
+    }
+
+    if (data && data.original_url) {
+        getLinkBtn.onclick = () => {
+            tg.openLink(data.original_url);
+        };
+    }
+}
 
         window.onload = initApp;
     </script>
