@@ -8,28 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src='//libtl.com/sdk.js' data-zone='11825523' data-sdk='show_11825523'></script>
-   
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    function showAdsGramInterstitial() {
-    return new Promise((resolve) => {
-
-        if (!AdsGramController) {
-            console.log("AdsGram is not available");
-            resolve(false);
-            return;
-        }
-
-        AdsGramController.show()
-            .then(() => {
-                console.log("AdsGram interstitial completed");
-                resolve(true);
-            })
-            .catch((error) => {
-                console.log("AdsGram interstitial failed or skipped:", error);
-                resolve(false);
-            });
-    });
-}
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Poppins', sans-serif; background: #0f172a; color: #f8fafc; padding-bottom: 80px; min-height: 100vh; overflow-x: hidden; -webkit-tap-highlight-color: transparent;}
@@ -596,22 +576,7 @@
         }
 
         // AD FLOW LOGIC
-        function startAdFlow() 
-        let AdsGramController = null;
-
-try {
-    if (window.Adsgram) {
-        AdsGramController = window.Adsgram.init({
-            blockId: "int-50475"
-        });
-
-        console.log("AdsGram initialized successfully");
-    } else {
-        console.log("AdsGram SDK not loaded");
-    }
-} catch (error) {
-    console.error("AdsGram initialization error:", error);
-}{
+        function startAdFlow() {
             document.getElementById('ui-loading').classList.add('hidden'); document.getElementById('ui-ad-viewer').classList.remove('hidden'); setupAdStep();
         }
 
@@ -642,160 +607,33 @@ try {
         }
 
         function executeAdClick() {
-            async function executeAdClick() {
-
-    const btn = document.getElementById('btn-watch-ad');
-    const loader = document.getElementById('ad-loader-ring');
-    const timerText = document.getElementById('ad-timer-text');
-
-    btn.innerHTML = `
-        <i class="fa-solid fa-spinner fa-spin mr-2"></i>
-        Loading Ad...
-    `;
-
-    btn.disabled = true;
-
-    if (loader) {
-        loader.classList.remove('hidden');
-    }
-
-    if (timerText) {
-        timerText.classList.add('hidden');
-    }
-
-    // ১. AdsGram Interstitial
-    await showAdsGramInterstitial();
-                const adsGramResult = await showAdsGramInterstitial();
-
-if (adsGramResult) {
-    console.log("AdsGram ad shown successfully");
-} else {
-    console.log("AdsGram unavailable/skipped, continuing to Monetag");
-}
-
-    // সামান্য অপেক্ষা
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    // ২. Monetag
-    if (typeof show_11825523 === 'function') {
-
-        try {
-
-            await show_11825523();
-
-            console.log("Monetag completed");
-
-            // Ad flow সফল
-            handleAdSuccess();
-
-        } catch (error) {
-
-            console.error("Monetag failed:", error);
-
-            btn.disabled = false;
-
-            if (loader) {
-                loader.classList.add('hidden');
-            }
-
-            btn.innerHTML = `
-                <i class="fa-solid fa-rotate-right mr-2"></i>
-                Try Again
-            `;
-
-            alert("Ad সম্পূর্ণভাবে লোড হয়নি। আবার চেষ্টা করুন।");
+            const btn = document.getElementById('btn-watch-ad'); btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading Ad...`;
+            document.getElementById('ad-loader-ring').classList.remove('hidden'); document.getElementById('ad-timer-text').classList.add('hidden');
+            if (typeof show_11825523 === 'function') { show_11825523().then(() => { handleAdSuccess(); }).catch(() => { handleAdSuccess(); }); }
         }
-
-    } else {
-
-        btn.disabled = false;
-
-        if (loader) {
-            loader.classList.add('hidden');
-        }
-
-        btn.innerHTML = `
-            <i class="fa-solid fa-rotate-right mr-2"></i>
-            Try Again
-        `;
-
-        alert("Monetag ad পাওয়া যাচ্ছে না।");
-    }
-}
 
         function handleAdSuccess() {
             if (currentAdStep < totalAdsRequired) { currentAdStep++; setupAdStep(); } else { showFinalLink(); }
         }
 
         async function showFinalLink() {
-    document.getElementById('btn-watch-ad').classList.add('hidden');
-    document.getElementById('ad-timer-container').classList.add('hidden');
-    document.getElementById('ad-progress-badge').classList.add('hidden');
-    document.getElementById('ad-step-title').innerText = "Link Unlocked!";
-
-    const getLinkBtn = document.getElementById('btn-get-link');
-    getLinkBtn.classList.remove('hidden');
-
-    // Self click / duplicate click হলে reward দেওয়া হবে না
-    if (window.invalidClickReason === "self") {
-
-        safeAlert("⚠️ This is your own link! Earnings will not be added.");
-
-    } else if (window.invalidClickReason === "duplicate") {
-
-        safeAlert("⚠️ You already viewed this link! Earnings won't be duplicated.");
-
-    } else {
-
-        const clickerId = tg.initDataUnsafe?.user?.id || 0;
-
-        try {
-
-            const rewardResponse = await fetch(`${VERCEL_API_URL}/reward`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    short_id: window.currentShortId,
-                    clicker_tg_id: clickerId
-                })
-            });
-
-            const rewardData = await rewardResponse.json();
-
-            if (!rewardResponse.ok || !rewardData.success) {
-                console.error("Reward API failed:", rewardData);
-                safeAlert("⚠️ Reward could not be processed.");
+            document.getElementById('btn-watch-ad').classList.add('hidden'); document.getElementById('ad-timer-container').classList.add('hidden');
+            document.getElementById('ad-progress-badge').classList.add('hidden'); document.getElementById('ad-step-title').innerText = "Link Unlocked!";
+            
+            const getLinkBtn = document.getElementById('btn-get-link'); getLinkBtn.classList.remove('hidden');
+            
+            if (window.invalidClickReason === "self") {
+                safeAlert("⚠️ This is your own link! Earnings will not be added.");
+            } else if (window.invalidClickReason === "duplicate") {
+                safeAlert("⚠️ You already viewed this link! Earnings won't be duplicated.");
             } else {
-                console.log("Reward successfully added:", rewardData);
+                let clickerId = tg.initDataUnsafe?.user?.id || 0;
+                try { fetch(`${VERCEL_API_URL}/reward`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ short_id: window.currentShortId, clicker_tg_id: clickerId }) }); } catch(e){}
             }
 
-        } catch (error) {
-
-            console.error("Reward API error:", error);
-            safeAlert("⚠️ Reward server error. Please try again.");
+            const { data } = await dbClient.from('links').select('original_url').eq('short_id', window.currentShortId).single();
+            if(data) getLinkBtn.onclick = () => tg.openLink(data.original_url);
         }
-    }
-
-    // Original link বের করা
-    const { data, error } = await dbClient
-        .from('links')
-        .select('original_url')
-        .eq('short_id', window.currentShortId)
-        .single();
-
-    if (error) {
-        console.error("Original URL error:", error);
-        return;
-    }
-
-    if (data && data.original_url) {
-        getLinkBtn.onclick = () => {
-            tg.openLink(data.original_url);
-        };
-    }
-}
 
         window.onload = initApp;
     </script>
