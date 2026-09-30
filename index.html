@@ -12,9 +12,6 @@
     <!-- Monetag -->
     <script src='//libtl.com/sdk.js' data-zone='11825523' data-sdk='show_11825523'></script>
 
-    <!-- AdsGram Interstitial -->
-    <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -882,10 +879,6 @@
         const MONETAG_ZONE =
             '11825523';
 
-        const ADSGRAM_BLOCK_ID =
-            'int-50762';
-
-
         // ==========================================
         // SUPABASE
         // ==========================================
@@ -930,128 +923,6 @@
         let totalAdsRequired = 1;
 
         window.invalidClickReason = null;
-
-        let AdsGramController = null;
-
-
-        // ==========================================
-        // ADSGRAM INITIALIZATION
-        // ==========================================
-
-        function initializeAdsGram() {
-
-            try {
-
-                if (
-                    typeof window.Adsgram !== 'undefined' &&
-                    typeof window.Adsgram.init === 'function'
-                ) {
-
-                    AdsGramController =
-                        window.Adsgram.init({
-                            blockId: ADSGRAM_BLOCK_ID
-                        });
-
-                    console.log(
-                        'AdsGram initialized:',
-                        ADSGRAM_BLOCK_ID
-                    );
-
-                    return true;
-                }
-
-                console.log(
-                    'AdsGram SDK is not available.'
-                );
-
-                return false;
-
-            } catch (error) {
-
-                console.error(
-                    'AdsGram initialization error:',
-                    error
-                );
-
-                AdsGramController = null;
-
-                return false;
-            }
-        }
-
-
-        // ==========================================
-        // ADSGRAM INTERSTITIAL
-        // ==========================================
-
-        function showAdsGramInterstitial() {
-
-            return new Promise((resolve) => {
-
-                if (!AdsGramController) {
-
-                    console.log(
-                        'AdsGram unavailable. Continuing.'
-                    );
-
-                    resolve(false);
-
-                    return;
-                }
-
-                try {
-
-                    const result =
-                        AdsGramController.show();
-
-                    if (
-                        result &&
-                        typeof result.then === 'function'
-                    ) {
-
-                        result
-                            .then(() => {
-
-                                console.log(
-                                    'AdsGram interstitial finished.'
-                                );
-
-                                resolve(true);
-
-                            })
-                            .catch((error) => {
-
-                                console.log(
-                                    'AdsGram interstitial skipped/failed:',
-                                    error
-                                );
-
-                                resolve(false);
-
-                            });
-
-                    } else {
-
-                        console.log(
-                            'AdsGram show returned no Promise.'
-                        );
-
-                        resolve(false);
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        'AdsGram show error:',
-                        error
-                    );
-
-                    resolve(false);
-                }
-
-            });
-        }
-
 
         // ==========================================
         // BASIC HELPERS
@@ -1163,10 +1034,6 @@
         async function initApp() {
 
             try {
-
-                // Initialize AdsGram
-                initializeAdsGram();
-
 
                 // Load admin settings
                 await loadAdminSettings();
@@ -3141,11 +3008,6 @@
                 'function';
 
 
-            // AdsGram is optional interstitial.
-            const adsGramAvailable =
-                !!AdsGramController;
-
-
             // If Monetag is unavailable,
             // do NOT unlock the link.
             if (
@@ -3208,9 +3070,7 @@
                     'ad-provider-status'
                 )
                 .innerText =
-                adsGramAvailable
-                    ? "Monetag + AdsGram"
-                    : "Monetag";
+                "Monetag + Monetag";
 
 
             btn.disabled =
@@ -3392,47 +3252,86 @@
 
 
             // ==================================================
-            // 2. ADSGRAM INTERSTITIAL
+            // 2. MONETAG SECOND AD
             // ==================================================
 
             if (
-                AdsGramController
+                typeof show_11825523 !==
+                'function'
             ) {
 
-                try {
-
-                    status.innerText =
-                        "Loading AdsGram interstitial...";
-
-
-                    console.log(
-                        'Starting AdsGram interstitial...'
-                    );
-
-
-                    await showAdsGramInterstitial();
-
-
-                    console.log(
-                        'AdsGram interstitial finished.'
-                    );
-
-
-                } catch (error) {
-
-                    console.log(
-                        'AdsGram error. Continuing:',
-                        error
-                    );
-
-                }
-
-            } else {
-
-                console.log(
-                    'AdsGram controller unavailable. Continuing with Monetag.'
+                console.error(
+                    'Monetag SDK unavailable for second ad.'
                 );
 
+                btn.disabled =
+                    false;
+
+                loader.classList.add(
+                    'hidden'
+                );
+
+                timerText.classList.remove(
+                    'hidden'
+                );
+
+                btn.innerHTML =
+                    '<i class="fa-solid fa-rotate-right mr-2"></i> Try Again';
+
+                status.innerText =
+                    "Second Monetag ad is unavailable. Please try again.";
+
+                safeAlert(
+                    "Second Monetag ad is not available. Please try again."
+                );
+
+                return;
+            }
+
+            try {
+
+                status.innerText =
+                    "Showing second Monetag advertisement...";
+
+                console.log(
+                    'Starting second Monetag ad...'
+                );
+
+                await show_11825523();
+
+                console.log(
+                    'Second Monetag ad completed successfully.'
+                );
+
+            } catch (error) {
+
+                console.error(
+                    'Second Monetag ad failed:',
+                    error
+                );
+
+                btn.disabled =
+                    false;
+
+                loader.classList.add(
+                    'hidden'
+                );
+
+                timerText.classList.remove(
+                    'hidden'
+                );
+
+                btn.innerHTML =
+                    '<i class="fa-solid fa-rotate-right mr-2"></i> Try Again';
+
+                status.innerText =
+                    "Second Monetag ad failed. Please try again.";
+
+                safeAlert(
+                    "Second ad could not be completed. Please try again."
+                );
+
+                return;
             }
 
 
