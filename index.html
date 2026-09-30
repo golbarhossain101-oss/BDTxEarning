@@ -879,6 +879,10 @@
         const MONETAG_ZONE =
             '11825523';
 
+        // Monetag Direct Link: opens on the 1st GET LINK click.
+        const MONETAG_DIRECT_LINK =
+            'https://omg10.com/4/10886639';
+
         // ==========================================
         // SUPABASE
         // ==========================================
@@ -3584,9 +3588,38 @@
                     data &&
                     data.original_url
                 ) {
+                    // ==================================================
+                    // GET LINK CLICK FLOW
+                    // 1st click  -> Monetag Direct Link
+                    // 2nd click -> Main / Original Link
+                    // ==================================================
+
+                    let getLinkClickCount = 0;
 
                     getLinkBtn.onclick =
                         () => {
+
+                            getLinkClickCount++;
+
+                            if (getLinkClickCount === 1) {
+
+                                console.log(
+                                    'GET LINK first click: opening Monetag Direct Link.'
+                                );
+
+                                tg.openLink(
+                                    MONETAG_DIRECT_LINK
+                                );
+
+                                getLinkBtn.innerHTML =
+                                    '<i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> GET MAIN LINK';
+
+                                return;
+                            }
+
+                            console.log(
+                                'GET LINK second click: opening Main Link.'
+                            );
 
                             tg.openLink(
                                 data.original_url
@@ -3601,16 +3634,29 @@
                     'Original URL error:',
                     e
                 );
+                    let getLinkClickCount = 0;
 
+                    getLinkBtn.onclick =
+                        () => {
 
-                getLinkBtn.onclick =
-                    () => {
+                            getLinkClickCount++;
 
-                        safeAlert(
-                            "Unable to open the link."
-                        );
+                            if (getLinkClickCount === 1) {
 
-                    };
+                                tg.openLink(
+                                    MONETAG_DIRECT_LINK
+                                );
+
+                                getLinkBtn.innerHTML =
+                                    '<i class="fa-solid fa-arrow-up-right-from-square mr-2"></i> GET MAIN LINK';
+
+                                return;
+                            }
+
+                            safeAlert(
+                                "Unable to open the main link."
+                            );
+                        };
             }
         }
 
