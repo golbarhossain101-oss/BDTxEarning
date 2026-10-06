@@ -1,4 +1,3 @@
-```javascript
 import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
@@ -13,39 +12,34 @@ export default async function handler(req, res) {
         });
     }
 
+    // ========================================
+    // ENV
+    // ========================================
+
+    const BOT_TOKEN = process.env.BOT_TOKEN;
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+    if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+        return res.status(500).json({
+            error: 'Missing environment variables'
+        });
+    }
+
     try {
 
-        // ========================================
-        // ENVIRONMENT VARIABLES
-        // ========================================
-
-        const BOT_TOKEN = process.env.BOT_TOKEN;
-        const SUPABASE_URL = process.env.SUPABASE_URL;
-        const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-
-        if (!BOT_TOKEN || !SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-            console.error('Missing environment variables');
-
-            return res.status(500).json({
-                error: 'Server configuration error'
-            });
-        }
-
         const supabase = createClient(
-            SUPABASE_URL,
-            SUPABASE_SERVICE_KEY
+            SUPABASE_URL.trim().replace(/\/$/, ''),
+            SUPABASE_SERVICE_KEY.trim()
         );
 
+        const update = req.body || {};
+
         // ========================================
-        // TELEGRAM UPDATE
+        // TELEGRAM MESSAGE
         // ========================================
 
-        const update = req.body;
-
-        const message =
-            update?.message ||
-            update?.edited_message ||
-            update?.channel_post;
+        const message = update.message;
 
         if (!message) {
             return res.status(200).json({
@@ -54,51 +48,52 @@ export default async function handler(req, res) {
             });
         }
 
-        // ========================================
-        // GET TEXT / CAPTION
-        // ========================================
+        const chatId = message.chat?.id;
+        const telegramUser = message.from;
 
-        // Works for:
-        // Normal text
-        // Photo caption
-        // Video caption
-        // GIF caption
-        // Document caption
-        // Animation caption
-
-        const originalText =
-            message.text ||
-            message.caption ||
-            '';
-
-        if (!originalText || !originalText.trim()) {
+        if (!chatId || !telegramUser) {
             return res.status(200).json({
-                ok: true,
-                message: 'No text or caption'
+                ok: true
             });
         }
+
+        // ========================================
+        // TEXT / CAPTION
+        // ========================================
+
+        // Text message
+        // Photo + caption
+        // Video + caption
+        // GIF + caption
+        // Document + caption
+
+        let rawText = '';
+
+        if (typeof message.text === 'string') {
+            rawText = message.text;
+        } else if (typeof message.caption === 'string') {
+            rawText = message.caption;
+        }
+
+        const text = rawText.trim();
 
         // ========================================
         // /START
         // ========================================
 
-        if (originalText.trim().startsWith('/start')) {
+        if (text === '/start') {
 
-            const welcomeText =
-                `👋 <b>Welcome to BDTxEarning Bot!</b>\n\n` +
-                `🔗 Send me any Blatim link like:\n\n` +
-                `<code>https://www.blatim.com/watch/zkxmk2bBF9MIcggE</code>\n\n` +
-                `আমি আপনার Blatim লিংকটি BDTxEarning short link-এ convert করে দেব।\n\n` +
-                `📝 Text + Link\n` +
-                `🖼 Photo + Caption + Link\n` +
-                `🎬 Video + Caption + Link\n` +
-                `🎞 GIF + Caption + Link\n\n` +
-                `সবগুলোই কাজ করবে।`;
-
-            await sendTelegramMessage(
+            await sendMessage(
                 BOT_TOKEN,
-                message.chat.id,
-                welcomeText
+                chatId,
+                `👋 <b>BDTxEarning Link Converter</b>\n\n` +
+                `আপনি Blatim.com এর Link পাঠান।\n\n` +
+                `Bot পুরো লেখাটি রেখে শুধু Blatim Link পরিবর্তন করে দেবে।\n\n` +
+                `📷 ছবি + Caption + Link\n` +
+                `🎥 ভিডিও + Caption + Link\n` +
+                `🎞️ GIF + Caption + Link\n\n` +
+                `মিডিয়া নিজে থেকে ফেরত পাঠানো হবে না।\n` +
+                `Caption-এর লেখা ও Link রাখা হবে।`
             );
 
             return res.status(200).json({
@@ -110,17 +105,38 @@ export default async function handler(req, res) {
         // /HELP
         // ========================================
 
-        if (originalText.trim() === '/help') {
+        if (text === '/help') {
 
-            await sendTelegramMessage(
+            await sendMessage(
                 BOT_TOKEN,
-                message.chat.id,
-                `ℹ️ <b>How to use</b>\n\n` +
-                `আপনি শুধু Blatim link পাঠান।\n\n` +
-                `Example:\n` +
+                chatId,
+                `📖 <b>How to use</b>\n\n` +
+                `যেকোনো Blatim Link পাঠান।\n\n` +
+                `উদাহরণ:\n` +
                 `<code>https://www.blatim.com/watch/zkxmk2bBF9MIcggE</code>\n\n` +
-                `অথবা পুরো লেখা সহ পাঠাতে পারেন।\n\n` +
-                `ছবি / ভিডিও / GIF-এর caption-এর মধ্যেও Blatim link থাকলে সেটাও convert হবে।`
+                `পুরো লেখা সহ Link পাঠালেও কাজ করবে।\n\n` +
+                `📷 Photo Caption\n` +
+                `🎥 Video Caption\n` +
+                `🎞️ GIF Caption\n\n` +
+                `শুধু Blatim Link পরিবর্তন হবে।`
+            );
+
+            return res.status(200).json({
+                ok: true
+            });
+        }
+
+        // ========================================
+        // NO TEXT / CAPTION
+        // ========================================
+
+        if (!text) {
+
+            await sendMessage(
+                BOT_TOKEN,
+                chatId,
+                `❌ <b>কোনো Text বা Caption পাওয়া যায়নি।</b>\n\n` +
+                `Blatim Link সহ Text/Caption পাঠান।`
             );
 
             return res.status(200).json({
@@ -132,246 +148,207 @@ export default async function handler(req, res) {
         // FIND BLATIM LINKS
         // ========================================
 
-        /*
-         * IMPORTANT:
-         *
-         * Only these links are accepted:
-         *
-         * https://www.blatim.com/watch/xxxxx
-         * https://blatim.com/watch/xxxxx
-         *
-         * Extra query parameters are also allowed.
-         */
+        const urls = extractBlatimUrls(text);
 
-        const blatimRegex =
-            /https?:\/\/(?:www\.)?blatim\.com\/watch\/[A-Za-z0-9_-]+(?:\?[^\s<>"']*)?/gi;
+        if (urls.length === 0) {
 
-        const matches = originalText.match(blatimRegex);
-
-        if (!matches || matches.length === 0) {
-
-            await sendTelegramMessage(
+            await sendMessage(
                 BOT_TOKEN,
-                message.chat.id,
-                `❌ <b>Blatim link পাওয়া যায়নি!</b>\n\n` +
-                `শুধু এই ধরনের লিংক পাঠান:\n\n` +
+                chatId,
+                `❌ <b>Blatim Link পাওয়া যায়নি।</b>\n\n` +
+                `উদাহরণ:\n` +
                 `<code>https://www.blatim.com/watch/zkxmk2bBF9MIcggE</code>`
             );
 
             return res.status(200).json({
-                ok: true,
-                message: 'No Blatim URL found'
+                ok: true
             });
         }
-
-        // ========================================
-        // TELEGRAM USER
-        // ========================================
-
-        const telegramUser = message.from;
-
-        if (!telegramUser || !telegramUser.id) {
-
-            return res.status(200).json({
-                ok: true,
-                message: 'No Telegram user'
-            });
-        }
-
-        const telegramId = telegramUser.id;
 
         // ========================================
         // FIND USER
         // ========================================
 
-        let { data: user, error: userError } = await supabase
+        const telegramId = Number(telegramUser.id);
+
+        let {
+            data: userData,
+            error: userError
+        } = await supabase
             .from('users')
             .select('*')
             .eq('telegram_id', telegramId)
             .maybeSingle();
 
         if (userError) {
+
             console.error('User lookup error:', userError);
 
-            throw userError;
+            return res.status(200).json({
+                ok: false,
+                error: 'User lookup failed'
+            });
         }
 
         // ========================================
-        // CREATE USER IF NOT EXISTS
+        // CREATE USER
         // ========================================
 
-        if (!user) {
+        if (!userData) {
 
-            const { data: newUser, error: createUserError } =
-                await supabase
-                    .from('users')
-                    .insert({
-                        telegram_id: telegramId,
-                        first_name: telegramUser.first_name || null,
-                        username: telegramUser.username || null
-                    })
-                    .select()
-                    .single();
+            const {
+                data: newUser,
+                error: createUserError
+            } = await supabase
+                .from('users')
+                .insert([{
+                    telegram_id: telegramId,
+                    first_name: telegramUser.first_name || null,
+                    last_name: telegramUser.last_name || null,
+                    username: telegramUser.username || null,
+                    balance: 0,
+                    total_earnings: 0,
+                    today_earnings: 0,
+                    total_clicks: 0,
+                    today_clicks: 0,
+                    is_blocked: false
+                }])
+                .select()
+                .single();
 
             if (createUserError) {
+
                 console.error(
                     'Create user error:',
                     createUserError
                 );
 
-                throw createUserError;
+                await sendMessage(
+                    BOT_TOKEN,
+                    chatId,
+                    `⚠️ Account তৈরি করা যাচ্ছে না।\n\nকিছুক্ষণ পরে আবার চেষ্টা করুন।`
+                );
+
+                return res.status(200).json({
+                    ok: false
+                });
             }
 
-            user = newUser;
+            userData = newUser;
         }
 
         // ========================================
-        // REMOVE DUPLICATE LINKS
+        // CONVERT LINKS
         // ========================================
 
-        const uniqueBlatimLinks = [
-            ...new Set(matches)
-        ];
-
-        // ========================================
-        // CONVERT EACH BLATIM LINK
-        // ========================================
-
+        let convertedText = text;
         const convertedLinks = [];
 
-        for (const originalLink of uniqueBlatimLinks) {
-
-            // ------------------------------------
-            // CHECK EXISTING LINK
-            // ------------------------------------
-
-            let { data: existingLink, error: existingError } =
-                await supabase
-                    .from('links')
-                    .select('*')
-                    .eq('original_url', originalLink)
-                    .eq('user_id', user.id)
-                    .maybeSingle();
-
-            if (existingError) {
-                console.error(
-                    'Existing link lookup error:',
-                    existingError
-                );
-
-                throw existingError;
-            }
-
-            // ------------------------------------
-            // CREATE LINK
-            // ------------------------------------
-
-            if (!existingLink) {
-
-                const { data: newLink, error: insertError } =
-                    await supabase
-                        .from('links')
-                        .insert({
-                            user_id: user.id,
-                            original_url: originalLink
-                        })
-                        .select()
-                        .single();
-
-                if (insertError) {
-                    console.error(
-                        'Link insert error:',
-                        insertError
-                    );
-
-                    throw insertError;
-                }
-
-                existingLink = newLink;
-            }
-
-            // ------------------------------------
-            // GET SHORT ID
-            // ------------------------------------
+        for (const originalUrl of urls) {
 
             const shortId =
-                existingLink.short_id;
+                await generateUniqueShortId(supabase);
 
             if (!shortId) {
-                console.error(
-                    'short_id missing:',
-                    existingLink
-                );
-
-                throw new Error(
-                    'Short ID was not generated'
-                );
+                continue;
             }
 
-            // ------------------------------------
-            // CREATE TELEGRAM MINI APP URL
-            // ------------------------------------
+            // ====================================
+            // INSERT INTO LINKS
+            // ====================================
+
+            const {
+                data: linkData,
+                error: linkError
+            } = await supabase
+                .from('links')
+                .insert([{
+                    original_url: originalUrl,
+                    short_id: shortId,
+                    user_id: userData.id,
+                    clicks: 0,
+                    earnings: 0
+                }])
+                .select()
+                .single();
+
+            if (linkError) {
+
+                console.error(
+                    'Link insert error:',
+                    linkError
+                );
+
+                continue;
+            }
+
+            // ====================================
+            // MINI APP LINK
+            // ====================================
+
+            const BOT_USERNAME = 'BDTxEarningbot';
+            const APP_SHORT_NAME = 'httpsbdtxearningvercelapp';
 
             const shortLink =
-                `https://t.me/BDTxEarningbot/httpsbdtxearningvercelapp?startapp=link_${shortId}`;
+                `https://t.me/${BOT_USERNAME}/${APP_SHORT_NAME}?startapp=link_${linkData.short_id}`;
 
             convertedLinks.push({
-                original: originalLink,
+                original: originalUrl,
                 short: shortLink
             });
+
+            // ====================================
+            // REPLACE ORIGINAL LINK
+            // ====================================
+
+            convertedText =
+                convertedText.split(originalUrl).join(shortLink);
         }
 
         // ========================================
-        // REPLACE ALL BLATIM LINKS
+        // CONVERSION FAILED
         // ========================================
 
-        let convertedText = originalText;
+        if (convertedLinks.length === 0) {
 
-        for (const item of convertedLinks) {
-
-            convertedText = convertedText.split(
-                item.original
-            ).join(
-                item.short
+            await sendMessage(
+                BOT_TOKEN,
+                chatId,
+                `❌ <b>Link Convert করা যায়নি।</b>\n\nআবার চেষ্টা করুন।`
             );
+
+            return res.status(200).json({
+                ok: false
+            });
         }
-
-        // ========================================
-        // ESCAPE HTML
-        // ========================================
-
-        const safeText =
-            escapeHtml(convertedText);
 
         // ========================================
         // SHARE BUTTON
         // ========================================
 
-        /*
-         * Share button uses the first converted link.
-         */
-
         const firstShortLink =
             convertedLinks[0].short;
 
-        // Remove first short link from share text
         const shareText =
             convertedText
                 .replace(firstShortLink, '')
                 .trim();
 
         const shareUrl =
-            `https://t.me/share/url?url=${encodeURIComponent(firstShortLink)}&text=${encodeURIComponent(shareText)}`;
+            `https://t.me/share/url?url=${encodeURIComponent(firstShortLink)}` +
+            `&text=${encodeURIComponent(shareText)}`;
 
         // ========================================
-        // SEND RESULT
+        // FINAL MESSAGE
         // ========================================
 
-        await sendTelegramMessage(
+        await sendMessage(
             BOT_TOKEN,
-            message.chat.id,
+            chatId,
+
             `✅ <b>Link Converted Successfully!</b>\n\n` +
-            `${safeText}`,
+            convertedText,
+
             {
                 inline_keyboard: [
                     [
@@ -380,27 +357,20 @@ export default async function handler(req, res) {
                             url: shareUrl
                         }
                     ]
-                }
+                ]
             }
         );
 
-        // ========================================
-        // SUCCESS
-        // ========================================
-
         return res.status(200).json({
             ok: true,
-            converted: convertedLinks.length
+            converted_urls: convertedLinks.length
         });
 
     } catch (error) {
 
-        console.error(
-            'BOT ERROR:',
-            error
-        );
+        console.error('BOT ERROR:', error);
 
-        return res.status(500).json({
+        return res.status(200).json({
             ok: false,
             error: error.message
         });
@@ -408,68 +378,155 @@ export default async function handler(req, res) {
 }
 
 
-// ==================================================
-// TELEGRAM SEND MESSAGE
-// ==================================================
+// ============================================
+// EXTRACT BLATIM URL
+// ============================================
 
-async function sendTelegramMessage(
-    botToken,
+function extractBlatimUrls(text) {
+
+    /*
+     * Supports:
+     *
+     * https://blatim.com/watch/xxxxx
+     * https://www.blatim.com/watch/xxxxx
+     * http://blatim.com/watch/xxxxx
+     * http://www.blatim.com/watch/xxxxx
+     *
+     * Also supports other Blatim paths.
+     */
+
+    const urlRegex =
+        /https?:\/\/(?:www\.)?blatim\.com\/[^\s<>"']+/gi;
+
+    const matches =
+        text.match(urlRegex) || [];
+
+    const result = [];
+
+    for (const url of matches) {
+
+        const cleaned = cleanUrl(url);
+
+        try {
+
+            const parsed = new URL(cleaned);
+
+            const hostname =
+                parsed.hostname
+                    .toLowerCase()
+                    .replace(/^www\./, '');
+
+            if (hostname === 'blatim.com') {
+
+                result.push(cleaned);
+            }
+
+        } catch (e) {
+
+            // Ignore invalid URL
+        }
+    }
+
+    return [...new Set(result)];
+}
+
+
+// ============================================
+// CLEAN URL
+// ============================================
+
+function cleanUrl(url) {
+
+    return url
+        .replace(/[.,!?;:)\]}]+$/g, '');
+}
+
+
+// ============================================
+// UNIQUE SHORT ID
+// ============================================
+
+async function generateUniqueShortId(supabase) {
+
+    for (let attempt = 0; attempt < 20; attempt++) {
+
+        const shortId =
+            Math.random()
+                .toString(36)
+                .substring(2, 9);
+
+        const {
+            data,
+            error
+        } = await supabase
+            .from('links')
+            .select('id')
+            .eq('short_id', shortId)
+            .maybeSingle();
+
+        if (error) {
+
+            console.error(
+                'Short ID check error:',
+                error
+            );
+
+            continue;
+        }
+
+        if (!data) {
+            return shortId;
+        }
+    }
+
+    return null;
+}
+
+
+// ============================================
+// SEND TELEGRAM MESSAGE
+// ============================================
+
+async function sendMessage(
+    BOT_TOKEN,
     chatId,
     text,
     replyMarkup = null
 ) {
 
-    const url =
-        `https://api.telegram.org/bot${botToken}/sendMessage`;
-
     const body = {
         chat_id: chatId,
         text: text,
         parse_mode: 'HTML',
-        disable_web_page_preview: false
+        disable_web_page_preview: true
     };
 
     if (replyMarkup) {
         body.reply_markup = replyMarkup;
     }
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-    });
-
-    const result =
-        await response.json();
-
-    if (!result.ok) {
-
-        console.error(
-            'Telegram API Error:',
-            result
+    const response =
+        await fetch(
+            `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            }
         );
 
-        throw new Error(
-            result.description ||
-            'Telegram API error'
+    const data =
+        await response.json();
+
+    if (!data.ok) {
+
+        console.error(
+            'Telegram error:',
+            data.description
         );
     }
 
-    return result;
+    return data;
 }
-
-
-// ==================================================
-// ESCAPE HTML
-// ==================================================
-
-function escapeHtml(text) {
-
-    return text
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-}
-```
