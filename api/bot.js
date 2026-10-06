@@ -58,16 +58,39 @@ export default async function handler(req, res) {
         }
 
         // ========================================
-        // GET MESSAGE TEXT
+        // GET TEXT OR PHOTO CAPTION
         // ========================================
 
-        const text = (message.text || '').trim();
+        /*
+         * Normal message:
+         * message.text
+         *
+         * Photo + caption:
+         * message.caption
+         *
+         * Photo will NOT be sent back.
+         * Only caption text will be converted.
+         */
+
+        const rawText =
+            message.text ||
+            message.caption ||
+            '';
+
+        const text = rawText.trim();
+
+        // ========================================
+        // NO TEXT
+        // ========================================
 
         if (!text) {
+
             await sendMessage(
                 BOT_TOKEN,
                 chatId,
-                `❌ <b>কোনো Text বা Link পাওয়া যায়নি।</b>\n\nএকটি লেখা বা URL পাঠান।`
+                `❌ <b>কোনো Text বা Link পাওয়া যায়নি।</b>\n\n` +
+                `একটি লেখা বা URL পাঠান।\n\n` +
+                `📷 ছবি পাঠালে Caption-এর মধ্যে Link থাকতে হবে।`
             );
 
             return res.status(200).json({
@@ -86,9 +109,14 @@ export default async function handler(req, res) {
                 chatId,
                 `👋 <b>BDTxEarning Link Converter</b>\n\n` +
                 `📝 আপনি পুরো লেখা সহ Link পাঠাতে পারেন।\n\n` +
+                `📷 ছবি + Caption + Link পাঠালেও ছবি বাদ দিয়ে ` +
+                `শুধু Caption-এর লেখা ও Link convert করা হবে।\n\n` +
                 `উদাহরণ:\n\n` +
-                `<code>🔥 নতুন মুভি এসেছে!\n\nমুভি দেখতে:\nhttps://example.com/movie\n\n❤️ সবাই শেয়ার করুন</code>\n\n` +
-                `আমি শুধু Link-টি Short করে পুরো লেখা আপনাকে আবার দিয়ে দেব।`
+                `<code>🔥 নতুন মুভি এসেছে!\n\n` +
+                `মুভি দেখতে:\n` +
+                `https://example.com/movie\n\n` +
+                `❤️ সবাই শেয়ার করুন</code>\n\n` +
+                `আমি শুধু Link-গুলো Short করে পুরো লেখাটি আপনাকে আবার দিয়ে দেব।`
             );
 
             return res.status(200).json({
@@ -107,8 +135,11 @@ export default async function handler(req, res) {
                 chatId,
                 `📖 <b>How to use</b>\n\n` +
                 `শুধু Link অথবা পুরো লেখা সহ Link পাঠান।\n\n` +
+                `📷 ছবি + Caption + Link পাঠালেও ছবি বাদ যাবে।\n\n` +
                 `উদাহরণ:\n\n` +
-                `<code>আজকের নতুন মুভি দেখুন:\nhttps://example.com/movie\n\nশেয়ার করতে ভুলবেন না ❤️</code>\n\n` +
+                `<code>আজকের নতুন মুভি দেখুন:\n` +
+                `https://example.com/movie\n\n` +
+                `শেয়ার করতে ভুলবেন না ❤️</code>\n\n` +
                 `Bot পুরো লেখাটি রেখে শুধু Link পরিবর্তন করে দেবে।`
             );
 
@@ -129,8 +160,10 @@ export default async function handler(req, res) {
                 BOT_TOKEN,
                 chatId,
                 `❌ <b>কোনো Valid Link পাওয়া যায়নি।</b>\n\n` +
-                `আপনার লেখার মধ্যে <b>http://</b> অথবা <b>https://</b> দিয়ে শুরু হওয়া Link থাকতে হবে।\n\n` +
-                `উদাহরণ:\n<code>https://example.com</code>`
+                `আপনার লেখার মধ্যে <b>http://</b> অথবা ` +
+                `<b>https://</b> দিয়ে শুরু হওয়া Link থাকতে হবে।\n\n` +
+                `উদাহরণ:\n` +
+                `<code>https://example.com</code>`
             );
 
             return res.status(200).json({
@@ -201,7 +234,8 @@ export default async function handler(req, res) {
                 await sendMessage(
                     BOT_TOKEN,
                     chatId,
-                    `⚠️ আপনার account তৈরি করা যাচ্ছে না।\n\nকিছুক্ষণ পরে আবার চেষ্টা করুন।`
+                    `⚠️ আপনার account তৈরি করা যাচ্ছে না।\n\n` +
+                    `কিছুক্ষণ পরে আবার চেষ্টা করুন।`
                 );
 
                 return res.status(200).json({
@@ -218,11 +252,12 @@ export default async function handler(req, res) {
 
         let convertedText = text;
 
+        const convertedLinks = [];
+
         for (const originalUrl of urls) {
 
-            const shortId = await generateUniqueShortId(
-                supabase
-            );
+            const shortId =
+                await generateUniqueShortId(supabase);
 
             if (!shortId) {
 
@@ -266,22 +301,79 @@ export default async function handler(req, res) {
             // MINI APP SHORT LINK
             // ====================================
 
-            const BOT_USERNAME = 'BDTxEarningbot';
-            const APP_SHORT_NAME = 'httpsbdtxearningvercelapp';
+            const BOT_USERNAME =
+                'BDTxEarningbot';
+
+            const APP_SHORT_NAME =
+                'httpsbdtxearningvercelapp';
 
             const shortLink =
                 `https://t.me/${BOT_USERNAME}/${APP_SHORT_NAME}?startapp=link_${linkData.short_id}`;
 
             // ====================================
-            // REPLACE ONLY ORIGINAL URL
+            // SAVE CONVERTED LINK
             // ====================================
 
-            convertedText = convertedText.split(
-                originalUrl
-            ).join(
-                shortLink
-            );
+            convertedLinks.push({
+                original: originalUrl,
+                short: shortLink
+            });
+
+            // ====================================
+            // REPLACE ORIGINAL URL
+            // ====================================
+
+            convertedText =
+                convertedText
+                    .split(originalUrl)
+                    .join(shortLink);
         }
+
+        // ========================================
+        // CHECK CONVERSION
+        // ========================================
+
+        if (convertedLinks.length === 0) {
+
+            await sendMessage(
+                BOT_TOKEN,
+                chatId,
+                `❌ <b>Link Convert করা যায়নি।</b>\n\n` +
+                `কিছুক্ষণ পরে আবার চেষ্টা করুন।`
+            );
+
+            return res.status(200).json({
+                success: false
+            });
+        }
+
+        // ========================================
+        // CREATE SHARE BUTTON
+        // ========================================
+
+        /*
+         * প্রথম Converted Link ব্যবহার করে
+         * Telegram Share URL তৈরি করা হচ্ছে।
+         */
+
+        const firstShortLink =
+            convertedLinks[0].short;
+
+        /*
+         * Share করার সময় একই Link যেন
+         * দুইবার না আসে, তাই প্রথম short link
+         * converted text থেকে বাদ দিয়ে
+         * বাকি লেখাটি text parameter-এ দেওয়া হচ্ছে।
+         */
+
+        const shareText =
+            convertedText
+                .replace(firstShortLink, '')
+                .trim();
+
+        const shareUrl =
+            `https://t.me/share/url?url=${encodeURIComponent(firstShortLink)}` +
+            `&text=${encodeURIComponent(shareText)}`;
 
         // ========================================
         // SEND FINAL CONVERTED TEXT
@@ -291,12 +383,22 @@ export default async function handler(req, res) {
             BOT_TOKEN,
             chatId,
             `✅ <b>Link Converted Successfully!</b>\n\n` +
-            convertedText
+            convertedText,
+            {
+                inline_keyboard: [
+                    [
+                        {
+                            text: '📤 Share',
+                            url: shareUrl
+                        }
+                    ]
+                ]
+            }
         );
 
         return res.status(200).json({
             success: true,
-            converted_urls: urls.length
+            converted_urls: convertedLinks.length
         });
 
     } catch (error) {
@@ -354,7 +456,11 @@ async function generateUniqueShortId(
     supabase
 ) {
 
-    for (let attempt = 0; attempt < 10; attempt++) {
+    for (
+        let attempt = 0;
+        attempt < 10;
+        attempt++
+    ) {
 
         const shortId =
             Math.random()
@@ -396,26 +502,38 @@ async function generateUniqueShortId(
 async function sendMessage(
     BOT_TOKEN,
     chatId,
-    text
+    text,
+    replyMarkup = null
 ) {
 
-    const response = await fetch(
-        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-        {
-            method: 'POST',
+    const body = {
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true
+    };
 
-            headers: {
-                'Content-Type': 'application/json'
-            },
+    // ========================================
+    // INLINE KEYBOARD
+    // ========================================
 
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: text,
-                parse_mode: 'HTML',
-                disable_web_page_preview: true
-            })
-        }
-    );
+    if (replyMarkup) {
+        body.reply_markup = replyMarkup;
+    }
+
+    const response =
+        await fetch(
+            `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+            {
+                method: 'POST',
+
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+
+                body: JSON.stringify(body)
+            }
+        );
 
     const data =
         await response.json();
