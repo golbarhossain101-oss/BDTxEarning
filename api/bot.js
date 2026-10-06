@@ -1,3 +1,4 @@
+```javascript
 import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
@@ -58,18 +59,18 @@ export default async function handler(req, res) {
         }
 
         // ========================================
-        // GET TEXT OR PHOTO CAPTION
+        // GET TEXT OR CAPTION
         // ========================================
 
         /*
-         * Normal message:
+         * Text message:
          * message.text
          *
-         * Photo + caption:
+         * Photo/Video/GIF + Caption:
          * message.caption
          *
-         * Photo will NOT be sent back.
-         * Only caption text will be converted.
+         * Media itself will NEVER be sent back.
+         * Only text/caption will be processed.
          */
 
         const rawText =
@@ -80,7 +81,7 @@ export default async function handler(req, res) {
         const text = rawText.trim();
 
         // ========================================
-        // NO TEXT
+        // NO TEXT / CAPTION
         // ========================================
 
         if (!text) {
@@ -88,9 +89,9 @@ export default async function handler(req, res) {
             await sendMessage(
                 BOT_TOKEN,
                 chatId,
-                `❌ <b>কোনো Text বা Link পাওয়া যায়নি।</b>\n\n` +
-                `একটি লেখা বা URL পাঠান।\n\n` +
-                `📷 ছবি পাঠালে Caption-এর মধ্যে Link থাকতে হবে।`
+                `❌ <b>কোনো Text বা Blatim Link পাওয়া যায়নি।</b>\n\n` +
+                `শুধু <b>Blatim.com</b> এর Link পাঠান।\n\n` +
+                `📷 ছবি / 🎥 ভিডিও / 🎞️ GIF পাঠালে Caption-এর মধ্যে Blatim Link থাকতে হবে।`
             );
 
             return res.status(200).json({
@@ -108,15 +109,13 @@ export default async function handler(req, res) {
                 BOT_TOKEN,
                 chatId,
                 `👋 <b>BDTxEarning Link Converter</b>\n\n` +
-                `📝 আপনি পুরো লেখা সহ Link পাঠাতে পারেন।\n\n` +
-                `📷 ছবি + Caption + Link পাঠালেও ছবি বাদ দিয়ে ` +
-                `শুধু Caption-এর লেখা ও Link convert করা হবে।\n\n` +
-                `উদাহরণ:\n\n` +
-                `<code>🔥 নতুন মুভি এসেছে!\n\n` +
-                `মুভি দেখতে:\n` +
-                `https://example.com/movie\n\n` +
-                `❤️ সবাই শেয়ার করুন</code>\n\n` +
-                `আমি শুধু Link-গুলো Short করে পুরো লেখাটি আপনাকে আবার দিয়ে দেব।`
+                `📝 আপনি পুরো লেখা সহ Blatim Link পাঠাতে পারেন।\n\n` +
+                `📷 ছবি + Caption + Link\n` +
+                `🎥 ভিডিও + Caption + Link\n` +
+                `🎞️ GIF + Caption + Link\n\n` +
+                `মিডিয়া বাদ দিয়ে শুধু Caption-এর লেখা ও Blatim Link convert করা হবে।\n\n` +
+                `⚠️ শুধুমাত্র <b>blatim.com</b> এর Link convert হবে।\n` +
+                `অন্য কোনো Website-এর Link convert হবে না।`
             );
 
             return res.status(200).json({
@@ -134,13 +133,12 @@ export default async function handler(req, res) {
                 BOT_TOKEN,
                 chatId,
                 `📖 <b>How to use</b>\n\n` +
-                `শুধু Link অথবা পুরো লেখা সহ Link পাঠান।\n\n` +
-                `📷 ছবি + Caption + Link পাঠালেও ছবি বাদ যাবে।\n\n` +
-                `উদাহরণ:\n\n` +
-                `<code>আজকের নতুন মুভি দেখুন:\n` +
-                `https://example.com/movie\n\n` +
-                `শেয়ার করতে ভুলবেন না ❤️</code>\n\n` +
-                `Bot পুরো লেখাটি রেখে শুধু Link পরিবর্তন করে দেবে।`
+                `শুধু <b>Blatim.com</b> এর Link অথবা পুরো লেখা সহ Blatim Link পাঠান।\n\n` +
+                `📷 ছবি + Caption থাকলে ছবি বাদ যাবে।\n` +
+                `🎥 ভিডিও + Caption থাকলে ভিডিও বাদ যাবে।\n` +
+                `🎞️ GIF + Caption থাকলে GIF বাদ যাবে।\n\n` +
+                `⚠️ অন্য Website-এর Link convert হবে না।\n\n` +
+                `Bot পুরো লেখাটি রেখে শুধু Blatim Link পরিবর্তন করে দেবে।`
             );
 
             return res.status(200).json({
@@ -149,21 +147,24 @@ export default async function handler(req, res) {
         }
 
         // ========================================
-        // FIND ALL URLS IN TEXT
+        // FIND ONLY BLATIM URLS
         // ========================================
 
-        const urls = extractUrls(text);
+        const urls = extractBlatimUrls(text);
+
+        // ========================================
+        // NO BLATIM LINK
+        // ========================================
 
         if (urls.length === 0) {
 
             await sendMessage(
                 BOT_TOKEN,
                 chatId,
-                `❌ <b>কোনো Valid Link পাওয়া যায়নি।</b>\n\n` +
-                `আপনার লেখার মধ্যে <b>http://</b> অথবা ` +
-                `<b>https://</b> দিয়ে শুরু হওয়া Link থাকতে হবে।\n\n` +
+                `❌ <b>কোনো Blatim Link পাওয়া যায়নি।</b>\n\n` +
+                `এই Bot শুধুমাত্র <b>blatim.com</b> এর Link convert করে।\n\n` +
                 `উদাহরণ:\n` +
-                `<code>https://example.com</code>`
+                `<code>https://www.blatim.com/xxxxx</code>`
             );
 
             return res.status(200).json({
@@ -247,7 +248,7 @@ export default async function handler(req, res) {
         }
 
         // ========================================
-        // CONVERT EVERY URL
+        // CONVERT ONLY BLATIM URLS
         // ========================================
 
         let convertedText = text;
@@ -320,7 +321,7 @@ export default async function handler(req, res) {
             });
 
             // ====================================
-            // REPLACE ORIGINAL URL
+            // REPLACE ORIGINAL BLATIM URL
             // ====================================
 
             convertedText =
@@ -338,7 +339,7 @@ export default async function handler(req, res) {
             await sendMessage(
                 BOT_TOKEN,
                 chatId,
-                `❌ <b>Link Convert করা যায়নি।</b>\n\n` +
+                `❌ <b>Blatim Link Convert করা যায়নি।</b>\n\n` +
                 `কিছুক্ষণ পরে আবার চেষ্টা করুন।`
             );
 
@@ -351,20 +352,8 @@ export default async function handler(req, res) {
         // CREATE SHARE BUTTON
         // ========================================
 
-        /*
-         * প্রথম Converted Link ব্যবহার করে
-         * Telegram Share URL তৈরি করা হচ্ছে।
-         */
-
         const firstShortLink =
             convertedLinks[0].short;
-
-        /*
-         * Share করার সময় একই Link যেন
-         * দুইবার না আসে, তাই প্রথম short link
-         * converted text থেকে বাদ দিয়ে
-         * বাকি লেখাটি text parameter-এ দেওয়া হচ্ছে।
-         */
 
         const shareText =
             convertedText
@@ -382,7 +371,7 @@ export default async function handler(req, res) {
         await sendMessage(
             BOT_TOKEN,
             chatId,
-            `✅ <b>Link Converted Successfully!</b>\n\n` +
+            `✅ <b>Blatim Link Converted Successfully!</b>\n\n` +
             convertedText,
             {
                 inline_keyboard: [
@@ -417,10 +406,10 @@ export default async function handler(req, res) {
 
 
 // ============================================
-// EXTRACT URLS
+// EXTRACT ONLY BLATIM URLS
 // ============================================
 
-function extractUrls(text) {
+function extractBlatimUrls(text) {
 
     const urlRegex =
         /https?:\/\/[^\s<>"']+/gi;
@@ -428,12 +417,42 @@ function extractUrls(text) {
     const matches =
         text.match(urlRegex) || [];
 
+    const blatimUrls = [];
+
+    for (const url of matches) {
+
+        const cleanedUrl =
+            cleanUrl(url);
+
+        try {
+
+            const parsedUrl =
+                new URL(cleanedUrl);
+
+            const hostname =
+                parsedUrl.hostname
+                    .toLowerCase()
+                    .replace(/^www\./, '');
+
+            // ====================================
+            // ONLY BLATIM.COM
+            // ====================================
+
+            if (hostname === 'blatim.com') {
+
+                blatimUrls.push(cleanedUrl);
+            }
+
+        } catch (error) {
+
+            // Ignore invalid URLs
+
+        }
+    }
+
     // Remove duplicate URLs
-    return [...new Set(
-        matches.map(url =>
-            cleanUrl(url)
-        )
-    )];
+
+    return [...new Set(blatimUrls)];
 }
 
 
@@ -548,3 +567,4 @@ async function sendMessage(
 
     return data;
 }
+```
